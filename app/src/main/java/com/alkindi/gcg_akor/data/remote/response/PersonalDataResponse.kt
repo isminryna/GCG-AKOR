@@ -1,0 +1,48 @@
+package com.alkindi.gcg_akor.data.remote.response
+
+import com.google.gson.annotations.SerializedName
+
+data class PersonalDataResponse(
+    @SerializedName("company") val companyID: String? = "Kosong",
+    @SerializedName("name") val name: String? = "Kosong",
+    @SerializedName("company_begin") val companyBegin: String? = "Kosong",
+    @SerializedName("company_last") val companyLast: String? = "Kosong",
+    @SerializedName("mbrgroup") val mbrGroup: String? = "Kosong",
+    @SerializedName("religion") val religion: String? = "Kosong",
+    @SerializedName("education") val education: String? = "Kosong",
+    @SerializedName("birth_place") val tempatLahir: String? = "Kosong",
+    @SerializedName("birth_date") val tglLahir: String? = "Kosong",
+    @SerializedName("address") val address: String? = "Kosong",
+    @SerializedName("phone") val phone: String? = "Kosong",
+    @SerializedName("email") val email: String? = "Kosong",
+    @SerializedName("marital_status") val maritalStatus: String? = "Kosong",
+    @SerializedName("photo_file") val photoFile: String? = "Kosong",
+    @SerializedName("gender") val gender: String? = "Kosong",
+    @SerializedName("termination") val termination: String? = "Kosong",
+    @SerializedName("termeff") val termEff: String? = "Kosong",
+    @SerializedName("termtype") val termType: String? = "Kosong",
+    @SerializedName("termreason") val termReason: String? = "Kosong",
+    @SerializedName("description") val description: String? = "Kosong",
+    @SerializedName("createdinfo") val createdInfo: String? = "Kosong",
+    @SerializedName("modifiedinfo") val modifiedInfo: String? = "Kosong",
+    @SerializedName("mbr_position") val mbrPosition: String? = "Kosong",
+    @SerializedName("mbr_unit") val mbrUnit: String? = "Kosong",
+    @SerializedName("mbr_empno") val noNIP: String? = "Kosong",
+    @SerializedName("mbr_empno2") val noNIP2: String? = "Kosong",
+    @SerializedName("bank") val bank: String? = "Kosong",
+    @SerializedName("nama_rek") val namaRek: String? = "Kosong",
+    @SerializedName("file_ktp") val fileKTP: String? = "Kosong",
+    @SerializedName("file_slip") val fileSlip: String? = "Kosong",
+    @SerializedName("file_sk") val fileSK: String? = "Kosong",
+    @SerializedName("ktp") val ktp: String? = "Kosong",
+    @SerializedName("norek") val noRek: String? ="Kosong"
+//    @SerializedName("name") val name: String? = "Kosong",
+//    @SerializedName("address") val address: String? = "Kosong",
+//    @SerializedName("gender") val gender: String? = "Kosong",
+//    @SerializedName("phone") val phone: String? = "Kosong",
+//    @SerializedName("email") val email: String? = "Kosong",
+//    @SerializedName("birth_place") val tempatLahir: String? = "Kosong",
+//    @SerializedName("birth_date") val tglLahir: String? = "Kosong",
+//    @SerializedName("mbr_empno") val noNIP: String? = "Kosong",
+//    @SerializedName("photo_file") val photoFile: String? = "Kosong"
+)

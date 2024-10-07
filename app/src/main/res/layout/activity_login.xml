@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".ui.activity.LoginActivity">
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -39,31 +39,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
+    <com.alkindi.gcg_akor.ui.customview.CustomEditTextUsername
         android:id="@+id/edtUsername"
         android:layout_width="235dp"
+        android:singleLine="true"
+        android:textSize="15sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Username"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imIllustration" />
 
-    <EditText
-        android:id="@+id/editText"
+    <com.alkindi.gcg_akor.ui.customview.CustomEditTextPw
+        android:id="@+id/edtPassword"
         android:layout_width="235dp"
-        android:hint="Password"
+        android:layout_marginTop="8dp"
+        android:inputType="textPassword"
+        android:textSize="15sp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtUsername" />
 
+    <TextView
+        android:id="@+id/tvWarningLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username / Password salah"
+        android:textSize="10sp"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:layout_marginStart="90dp"
+        android:textColor="@color/danger_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtPassword" />
+
     <Button
+        android:id="@+id/btnMasuk"
         android:layout_width="235dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Masuk"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@id/tvWarningLogin"
+         />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

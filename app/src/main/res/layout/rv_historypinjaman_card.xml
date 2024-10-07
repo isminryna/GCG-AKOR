@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    app:cardCornerRadius="25dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvGaji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/abu_abu_pinjaman"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Gaji"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNominalGaji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp.1.000.000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPinjamanBulanan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pinjaman Bulanan"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvGaji" />
+
+        <TextView
+            android:id="@+id/tvNominalPinjamanBulanan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:textStyle="bold"
+            android:text="Rp.600.000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNominalGaji" />
+
+        <TextView
+            android:id="@+id/tvUniqueId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/abu_abu_pinjaman"
+            android:text="Contoh Teks"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPinjamanBulanan" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tenor "
+            app:layout_constraintEnd_toStartOf="@+id/tvSisaTenor"
+            app:layout_constraintTop_toBottomOf="@id/tvNominalPinjamanBulanan" />
+        <TextView
+            android:id="@+id/tvSisaTenor"
+            android:text="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNominalPinjamanBulanan"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
