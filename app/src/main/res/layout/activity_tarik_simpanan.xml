@@ -62,28 +62,47 @@
 
 
             <TextView
-                android:id="@+id/tvTotalSimpananSukarela"
+                android:id="@+id/tvTotalSimpanan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="Total Simpanan Sukarela"
+                android:text="Total"
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Spinner
+                android:id="@+id/spinnerTipeSimpanan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_spinner_bg"
+                android:entries="@array/spinner_tipe_simpanan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalSimpanan" />
+
+            <TextView
+                android:id="@+id/tvRp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Rp "
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerTipeSimpanan" />
 
             <TextView
                 android:id="@+id/tvNominalSimpananSukarela"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Rp2.000.000"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTotalSimpananSukarela"
-                app:layout_constraintBottom_toTopOf="@id/horScrollView" />
+                app:layout_constraintBottom_toTopOf="@id/horScrollView"
+                app:layout_constraintStart_toEndOf="@id/tvRp"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerTipeSimpanan" />
 
 
             <ImageButton
@@ -94,19 +113,28 @@
                 android:background="@null"
                 android:src="@drawable/baseline_visibility_off_24"
                 android:tag="visibleNominal"
+                app:layout_constraintBottom_toBottomOf="@id/tvNominalSimpananSukarela"
                 app:layout_constraintStart_toEndOf="@+id/tvNominalSimpananSukarela"
-                app:layout_constraintTop_toTopOf="@id/tvNominalSimpananSukarela"
-                app:layout_constraintBottom_toBottomOf="@id/tvNominalSimpananSukarela" />
+                app:layout_constraintTop_toTopOf="@id/tvNominalSimpananSukarela" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="35dp"
+                android:indeterminateDrawable="@drawable/custom_progressbar_white"
+                android:layout_height="35dp"
+                android:layout_marginBottom="13dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/horScrollView"
+                app:layout_constraintStart_toEndOf="@+id/btnNominalVisibility" />
 
             <HorizontalScrollView
                 android:id="@+id/horScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/tvNominalSimpananSukarela"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/tvNominalSimpananSukarela">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -118,11 +146,11 @@
                     <Button
                         android:id="@+id/btnDetailSimpanan"
                         android:layout_width="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:textColor="@color/txt_blue"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:paddingHorizontal="16dp"
                         android:text="Detail Simpanan"
-                        android:paddingHorizontal="16dp" />
+                        android:textColor="@color/txt_blue" />
 
                     <Space
                         android:layout_width="16dp"
@@ -132,11 +160,11 @@
                     <Button
                         android:id="@+id/btnTarikSimpanan"
                         android:layout_width="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:layout_height="wrap_content"
-                       android:textColor="@color/txt_blue"
+                        android:backgroundTint="@color/white"
+                        android:paddingHorizontal="16dp"
                         android:text="Tarik Simpanan"
-                        android:paddingHorizontal="16dp" />
+                        android:textColor="@color/txt_blue" />
 
                 </LinearLayout>
             </HorizontalScrollView>
@@ -149,8 +177,8 @@
         android:id="@+id/fragmentDetailSimpanan"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cardView1"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardView1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

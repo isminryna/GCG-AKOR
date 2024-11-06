@@ -32,6 +32,14 @@
     <string name="text_label_idMember">ID Member</string>
     <string name="text_appbar_personalData">Personal Data</string>
     <string name="text_namaMember">Candra</string>
+    <string name="tv_appbar_pinjaman">Pinjaman</string>
+    <string name="text_rp">Rp </string>
+    <string name="text_tipe_pinjaman">Tipe Pinjaman</string>
+    <string name="text_tipe_potongan">Tipe Potongan</string>
+    <string name="text_nominal_tipe_potongan">Nominal Tipe Potongan</string>
+    <string name="text_garis_pembatas">-----------------------------------------------------------</string>
+    <string name="rp_with_space">Rp</string>
+    <string name="txt_pilih_tmbl">Pilih</string>
 
 
     <!--    Untuk digunakan pada recycleview history pinjaman -->
@@ -79,6 +87,14 @@
         <item>3</item>
         <item>3</item>
         <item>3</item>
+    </string-array>
+
+    <string-array name="spinner_tipe_simpanan">
+        <item>Simpanan Sukarela</item>
+        <item>Simpnanan Khusus</item>
+        <item>Simpnanan Khusus Pagu</item>
+        <item>Simpanan Pokok</item>
+        <item>Simpanan Wajib</item>
     </string-array>
 
     <string-array name="history_pinjaman_id">
@@ -211,5 +227,23 @@
 
     <!--    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
+    <!--    Tipe Pinjaman   -->
+    <string-array name="kode_tipe_pinjaman">
+        <item>JAPAN</item>
+        <item>RUMAH</item>
+        <item>BRANG</item>
+        <item>MOBIL</item>
+        <item>MOTOR</item>
+        <item>JAPEN</item>
+    </string-array>
 
+    <string-array name="tipe_pinjaman">
+        <item>Jangka Panjang</item>
+        <item>Rumah</item>
+        <item>Kredit Barang</item>
+        <item>Mobil</item>
+        <item>Motor</item>
+        <item>Jangka Pendek</item>
+        <!--   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     -->
+    </string-array>
 </resources>

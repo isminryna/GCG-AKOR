@@ -177,6 +177,15 @@
     </com.google.android.material.card.MaterialCardView>
     <!-- !!!!!!!!!! -->
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/appBar"
+        app:layout_constraintTop_toBottomOf="@+id/btnConfirmTarikSimpanan"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <!--    Card Untuk Catatan Transaksi-->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardCatatan"
@@ -215,6 +224,8 @@
     </com.google.android.material.card.MaterialCardView>
     <!-- !!!!!!!!!! -->
 
+
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardTotal"
         android:layout_width="match_parent"
@@ -235,6 +246,7 @@
             android:paddingVertical="8dp">
 
             <TextView
+                android:id="@+id/tvTypeSimpanan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -243,6 +255,7 @@
                 android:textSize="13sp" />
 
             <TextView
+                android:id="@+id/tvNominalTipeSimpanan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
@@ -253,9 +266,9 @@
     </androidx.cardview.widget.CardView>
 
     <Button
+        android:id="@+id/btnConfirmTarikSimpanan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
         android:text="Tarik Simpanan"

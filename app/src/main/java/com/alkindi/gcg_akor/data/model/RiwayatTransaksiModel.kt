@@ -6,7 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class RiwayatTransaksiModel(
     val jenisTransaksi: String,
-    val tipeTransaksi: String,
     val idTransaksi: String,
     val nominal: String,
     val tglTransaksi: String

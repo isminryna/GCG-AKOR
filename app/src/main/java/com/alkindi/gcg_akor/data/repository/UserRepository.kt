@@ -8,6 +8,7 @@ import com.alkindi.gcg_akor.data.local.db.room.UserPersonalDAO
 import com.alkindi.gcg_akor.data.local.db.room.entity.PersonalDataEntity
 import com.alkindi.gcg_akor.data.local.model.UserModel
 import com.alkindi.gcg_akor.data.local.pref.UserPreference
+import com.alkindi.gcg_akor.data.remote.response.HistoryTarikSimpResponse
 import com.alkindi.gcg_akor.data.remote.retrofit.ApiConfig
 import com.alkindi.gcg_akor.data.remote.retrofit.ApiService
 import com.alkindi.gcg_akor.utils.ApiNetworkingUtils
@@ -22,9 +23,31 @@ class UserRepository(
 ) {
 
     private val result = MediatorLiveData<Result<List<PersonalDataEntity>>>()
+//    private val _historyTarikSimpResponse = MediatorLiveData<List<HistoryTarikSimpResponse>>()
+//    val historyTarikSimpResponse: LiveData<List<HistoryTarikSimpResponse>> =
+//        _historyTarikSimpResponse
 
     fun getUserPersonalData(): LiveData<List<PersonalDataEntity>> =
         userPersonalDAO.getUserPersonalData()
+
+//    suspend fun fetchTarikSimpananHistory(username: String) {
+//        val data = mapOf(
+//            "username" to username.uppercase()
+//        )
+//        val encodedData = ApiNetworkingUtils.jsonFormatter(data)
+//        val apiCode = "NU5mgOhAZUGhJ24WH1zuqwTnRtBFfK6yMhf%2B8XnZd799HXV35pDBeAmaQOPnZORD"
+//        val fullUrl =
+//            "${ApiConfig.BASE_URL_KOPEGMAR}txn?fmc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=${ApiConfig.WORKSPACE_CODE_KOPEGMAR};rc=${apiCode};vars=${encodedData}"
+//
+//        try {
+//            val response = apiService.getHistorySimpanan(fullUrl)
+//            _historyTarikSimpResponse.value =response
+//
+//        } catch (e: Exception) {
+//            Log.e(TAG, "ERROR FETCHING THE DATA ${e.message.toString()}")
+//            throw e
+//        }
+//    }
 
 
     suspend fun fetchUserPersonalData(username: String) {

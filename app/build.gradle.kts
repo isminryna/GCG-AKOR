@@ -42,7 +42,9 @@ android {
 }
 
 dependencies {
-    val room_version = "2.6.1"
+//    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.fragment.ktx)
 
 
     implementation(libs.androidx.core.ktx)

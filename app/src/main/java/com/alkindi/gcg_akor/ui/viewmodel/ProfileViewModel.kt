@@ -36,8 +36,9 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                         "username" to username.uppercase()
                     )
                     val encodedJson = ApiNetworkingUtils.jsonFormatter(data)
+//                    val apiCode ="KvRnqbr%2BktvsOVY89qJvEdkJAcJmFdyI7GQ98Ln6DH4%3D"
                     val fullUrl =
-                        "${ApiConfig.BASE_URL_KOPEGMAR}txn?fnc=runLib;opic=79ipFwZR44YmvtrR1M1t9A;csn=YPNRO;rc=KvRnqbr%2BktvsOVY89qJvEdkJAcJmFdyI7GQ98Ln6DH4%3D;vars=${encodedJson}"
+                        "${ApiConfig.BASE_URL_KOPEGMAR}txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=YPNRO;rc=KvRnqbr%2BktvsOVY89qJvEdkJAcJmFdyI7GQ98Ln6DH4%3D;vars=${encodedJson}"
                     val response = apiService.getProfile(fullUrl)
                     Log.d(TAG, "Profile Data API Response: $response")
                     Log.d(TAG, "Encoded Json Data: $encodedJson")

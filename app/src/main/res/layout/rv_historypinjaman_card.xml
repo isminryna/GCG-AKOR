@@ -12,12 +12,12 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/tvGaji"
+            android:id="@+id/tvStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/abu_abu_pinjaman"
             android:fontFamily="@font/poppins_medium"
-            android:text="Gaji"
+            android:text="Diproses"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,11 +33,11 @@
             android:id="@+id/tvPinjamanBulanan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pinjaman Bulanan"
+            android:text="Pinjaman JAPEN"
             android:fontFamily="@font/poppins_medium"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvGaji" />
+            app:layout_constraintTop_toBottomOf="@id/tvStatus" />
 
         <TextView
             android:id="@+id/tvNominalPinjamanBulanan"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/abu_abu_pinjaman"
-            android:text="Contoh Teks"
+            android:text="10003738"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvPinjamanBulanan" />
 

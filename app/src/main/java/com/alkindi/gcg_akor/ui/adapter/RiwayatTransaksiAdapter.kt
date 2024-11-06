@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alkindi.gcg_akor.data.model.RiwayatTransaksiModel
 import com.alkindi.gcg_akor.databinding.RvRiwayattransaksiCardBinding
+import com.alkindi.gcg_akor.utils.FormatterAngka
 
 class RiwayatTransaksiAdapter :
     ListAdapter<RiwayatTransaksiModel, RiwayatTransaksiAdapter.MyViewHolder>(DIFF_CALLBACK) {
@@ -15,9 +16,10 @@ class RiwayatTransaksiAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: RiwayatTransaksiModel) {
             binding.tvTarikSimpanan.text = item.jenisTransaksi
-            binding.tvSukarela.text = item.tipeTransaksi
+//            binding.tvSukarela.text = item.tipeTransaksi
             binding.idTransaksi.text = item.idTransaksi
-            binding.tvNominalRiwayat.text = item.nominal
+            val formattedNominal =FormatterAngka.formatterAngkaRibuanDouble(item.nominal.toDouble())
+            binding.tvNominalRiwayat.text = formattedNominal
             binding.tglTransaksi.text =item.tglTransaksi
         }
     }

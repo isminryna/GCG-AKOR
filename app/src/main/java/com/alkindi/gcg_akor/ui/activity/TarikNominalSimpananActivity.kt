@@ -1,19 +1,33 @@
 package com.alkindi.gcg_akor.ui.activity
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.alkindi.gcg_akor.data.local.model.simpTypeWNominal
+import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.ActivityTarikNominalSimpananBinding
+import com.alkindi.gcg_akor.ui.viewmodel.TarikNominalSimpananViewModel
+import com.alkindi.gcg_akor.utils.AndroidUIHelper
 import com.alkindi.gcg_akor.utils.FormatterAngka
 import com.google.android.material.chip.Chip
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class TarikNominalSimpananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTarikNominalSimpananBinding
+    private lateinit var userMBRID: String
+    private lateinit var tipeTransaksi: String
+    private val tarikNominalSimpananViewModel: TarikNominalSimpananViewModel by viewModels {
+        ViewModelFactory.getInstance(application)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +42,10 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         }
 
         logicAturNominal()
+        getDataFromPreviousActivity()
+        checkLoading()
         chipButtonLogic()
+        getUserMBRID()
 
         binding.btnBack.setOnClickListener {
             finish()
@@ -37,10 +54,96 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
 
         binding.layoutCatatan.setOnClickListener {
             binding.edtCatatan.requestFocus()
-
-            val keybInput =getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val keybInput = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keybInput.showSoftInput(binding.edtCatatan, InputMethodManager.SHOW_IMPLICIT)
         }
+
+        binding.btnConfirmTarikSimpanan.setOnClickListener {
+            confirmTarikSimpanan()
+        }
+    }
+
+    private fun getUserMBRID() {
+        tarikNominalSimpananViewModel.getSession().observe(this) {
+            userMBRID = it.username
+        }
+    }
+
+    private fun checkLoading() {
+        tarikNominalSimpananViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun confirmTarikSimpanan() {
+        val nominal = binding.tvNominalTarikSimpanan.text.toString()
+        val convertedNominal =FormatterAngka.formatterRibuanKeInt(nominal)
+        val tipeSimpanan = binding.tvTypeSimpanan.text
+        val catatanTransaksi = binding.edtCatatan.text.toString()
+        val simpananYgTersedia = binding.tvNominalTipeSimpanan.text.toString()
+        val convertedNominalYgTersedia =FormatterAngka.formatterRibuanKeInt(simpananYgTersedia)
+
+//        TODO: SELESAIKAN INPUT TRANSAKSI KE TABEL
+        val tglSaatIni =Date()
+        val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
+        val formattedDate =dateFormatter.format(tglSaatIni)
+        when (tipeSimpanan) {
+            "Simpanan Sukarela" -> {
+                tipeTransaksi = "SS"
+                Log.d(TAG, "Tipe Simpanan: $tipeSimpanan")
+            }
+
+            "Simpanan Khusus" -> {
+                tipeTransaksi = "SK"
+                Log.d(TAG, "Tipe Simpanan: $tipeSimpanan")
+            }
+
+            "Simpanan Khusus Pagu" -> {
+                tipeTransaksi = "SKP"
+                Log.d(TAG, "Tipe Simpanan: $tipeSimpanan")
+            }
+        }
+        tarikNominalSimpananViewModel.tarikNominalSimpanan(
+            userMBRID,
+            convertedNominal.toString(),
+            catatanTransaksi,
+            tipeTransaksi,
+            convertedNominalYgTersedia.toString(),
+            formattedDate
+        )
+    }
+
+    private fun getDataFromPreviousActivity() {
+        val simpData = if (Build.VERSION.SDK_INT >= 33) {
+            intent.getParcelableExtra<simpTypeWNominal>(
+                EXTRA_SIMP_TYPE,
+                simpTypeWNominal::class.java
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(EXTRA_SIMP_TYPE)
+        }
+
+        if (simpData == null) {
+            AndroidUIHelper.showAlertDialog(
+                this,
+                "Error",
+                "Tidak dapat melanjutkan tarik simpanan. Silahkan coba beberapa saat lagi"
+            )
+            Log.e(TAG, "Data dari intent sebelumnya tidak dapat ditemukan")
+            finish()
+        }
+
+        binding.tvNominalTipeSimpanan.text = simpData!!.nominal ?: "Data is null"
+        binding.tvTypeSimpanan.text = simpData.tipeSimpanan ?: "Data is null"
     }
 
     private fun chipButtonLogic() {
@@ -67,6 +170,7 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         binding.btnTambahNominal.setOnClickListener {
             tambahNominal()
         }
+
         binding.btnKurangiNominal.setOnClickListener {
             kurangiNominal()
         }
@@ -88,5 +192,10 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         val newNumber = FormatterAngka.formatterRibuanKeInt(currentNumber) + 10000
         binding.tvNominalTarikSimpanan.text = FormatterAngka.formatterAngkaRibuan(newNumber)
         binding.btnKurangiNominal.visibility = View.VISIBLE
+    }
+
+    companion object {
+        private val TAG = TarikNominalSimpananActivity::class.java.simpleName
+        const val EXTRA_SIMP_TYPE = "extra_simp_type"
     }
 }
