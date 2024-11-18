@@ -42,7 +42,7 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ViewMod
             if (!pwBaru.isNullOrEmpty()) jsonMap["np"] = pwBaru
             if (!pwKetikUlang.isNullOrEmpty()) jsonMap["rp"] = pwKetikUlang
 
-            // Convert the map to a JSON string
+            // Convert the map to a JSON strin
             val argl = Gson().toJson(jsonMap)
             Log.d(TAG, "Nilai yang ingin diubah: $argl")
             _isLoading.value = true
