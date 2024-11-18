@@ -9,14 +9,20 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_akor_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_akor_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GCGAKOR"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.DetailHistoryPinjaman"
+            android:name=".ui.activity.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.TarikSimpananProcessedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.DetailHistoryPinjamanActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.DetailPinjamanInfoActivity"

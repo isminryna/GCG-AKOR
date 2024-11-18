@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.alkindi.gcg_akor.data.model.HistoryPinjamanModel
 import com.alkindi.gcg_akor.data.remote.response.HistoryPinjamanItem
-import com.alkindi.gcg_akor.data.remote.response.HistoryPinjamanResponse
 import com.alkindi.gcg_akor.databinding.RvHistorypinjamanCardBinding
-import com.alkindi.gcg_akor.ui.activity.DetailHistoryPinjaman
+import com.alkindi.gcg_akor.ui.activity.DetailHistoryPinjamanActivity
 import com.alkindi.gcg_akor.utils.FormatterAngka
 
 class HistoryPinjamanAdapter :
@@ -20,15 +18,22 @@ class HistoryPinjamanAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HistoryPinjamanItem) {
             binding.tvUniqueId.text = item.docNum
-            binding.tvNominalGaji.text = item.amount.toString()
-//            binding.tvNominalPinjamanBulanan.text = item.pinjamanBulanan
-            val fetchedNominalPinjamanBulanan =item.remain.toString()
-            binding.tvNominalPinjamanBulanan.text = fetchedNominalPinjamanBulanan
-            binding.tvPinjamanBulanan.text =item.pjmCode
-            binding.tvSisaTenor.text = item.sisaTenor.toString()
+            val fetchedNominalGaji = item.amount.toString()
+            val fetchedNominalPinjamanBulanan = item.remain.toString()
+            val fetchedJmlTenor = item.sisaTenor.toString()
+            val formattedNominalGaji =
+                FormatterAngka.formatterAngkaRibuanDouble(fetchedNominalGaji.toDouble())
+            val formattedNominalPinjamanBulanan =
+                FormatterAngka.formatterAngkaRibuanDouble(fetchedNominalPinjamanBulanan.toDouble())
+            val formattedJmlTenor =FormatterAngka.formatterAngkaRibuanDouble(fetchedJmlTenor.toDouble())
+            binding.tvNominalPinjamanBulanan.text = formattedNominalPinjamanBulanan
+            binding.tvPinjamanBulanan.text = item.pjmCode
+            binding.tvNominalGaji.text = formattedNominalGaji
+            binding.tvSisaTenor.text = formattedJmlTenor
             with(itemView) {
                 setOnClickListener {
-                    Intent(context, DetailHistoryPinjaman::class.java).apply {
+                    Intent(context, DetailHistoryPinjamanActivity::class.java).apply {
+                        putExtra(DetailHistoryPinjamanActivity.EXTRA_DOCNUM, item.docNum)
                         context.startActivity(this)
                     }
                 }

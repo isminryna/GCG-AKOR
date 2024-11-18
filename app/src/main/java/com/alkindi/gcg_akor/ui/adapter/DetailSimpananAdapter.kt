@@ -1,22 +1,25 @@
 package com.alkindi.gcg_akor.ui.adapter
 
 import android.annotation.SuppressLint
+import android.telecom.Call.Details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alkindi.gcg_akor.data.model.DetailSimpananModel
+import com.alkindi.gcg_akor.data.remote.response.DetailSimpananItem
+import com.alkindi.gcg_akor.databinding.ActivityTarikSimpananBinding
 import com.alkindi.gcg_akor.databinding.RvDetailsimpananCardBinding
 
 class DetailSimpananAdapter :
-    ListAdapter<DetailSimpananModel, DetailSimpananAdapter.MyViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<DetailSimpananItem, DetailSimpananAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(private val binding: RvDetailsimpananCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: DetailSimpananModel) {
-            binding.tvSimpananSukarela.text = item.jenisDana
-            binding.tglTransaksi.text = item.tgl
-            binding.tvNominalDetail.text = item.nominal
+        fun bind(item: DetailSimpananItem) {
+            binding.tvSimpananSukarela.text = item.txnCode
+            binding.tglTransaksi.text = item.transDate
+            binding.tvNominalDetail.text =item.amount.toString()
         }
     }
 
@@ -32,18 +35,18 @@ class DetailSimpananAdapter :
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DetailSimpananModel>() {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DetailSimpananItem>() {
             @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
-                oldItem: DetailSimpananModel,
-                newItem: DetailSimpananModel
+                oldItem: DetailSimpananItem,
+                newItem: DetailSimpananItem
             ): Boolean {
                 return oldItem == newItem
             }
 
             override fun areItemsTheSame(
-                oldItem: DetailSimpananModel,
-                newItem: DetailSimpananModel
+                oldItem: DetailSimpananItem,
+                newItem: DetailSimpananItem
             ): Boolean {
                 return oldItem == newItem
             }

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.alkindi.gcg_akor.R
-import com.alkindi.gcg_akor.data.local.model.simpTypeWNominal
+import com.alkindi.gcg_akor.data.local.model.SimpTypeWNominal
 import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.ActivityTarikSimpananBinding
 import com.alkindi.gcg_akor.ui.fragment.DetailSimpananFragment
@@ -51,7 +51,7 @@ class TarikSimpananActivity : AppCompatActivity() {
             .add(R.id.fragmentDetailSimpanan, RiwayatTransaksiFragment()).commit()
 
         binding.btnTarikSimpanan.setOnClickListener {
-            val extraData = simpTypeWNominal(
+            val extraData = SimpTypeWNominal(
                 binding.spinnerTipeSimpanan.selectedItem.toString(),
                 binding.tvNominalSimpananSukarela.text.toString()
             )

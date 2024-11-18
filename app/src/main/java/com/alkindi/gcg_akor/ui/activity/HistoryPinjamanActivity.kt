@@ -8,15 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.alkindi.gcg_akor.R
-import com.alkindi.gcg_akor.data.model.HistoryPinjamanModel
 import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.ActivityHistoryPinjamanBinding
 import com.alkindi.gcg_akor.ui.adapter.HistoryPinjamanAdapter
 import com.alkindi.gcg_akor.ui.viewmodel.HistoryPinjamanViewModel
 
 class HistoryPinjamanActivity : AppCompatActivity() {
-    private val list = ArrayList<HistoryPinjamanModel>()
     private lateinit var binding: ActivityHistoryPinjamanBinding
     private val historyPinjamanViewModel: HistoryPinjamanViewModel by viewModels {
         ViewModelFactory.getInstance(application)
@@ -67,30 +64,7 @@ class HistoryPinjamanActivity : AppCompatActivity() {
                 binding.rvHistoryPinjaman.adapter = adapter
             }
         }
-
-//        list.addAll(getHistoryPinjamanData())
-//        val adapter = HistoryPinjamanAdapter()
-//        adapter.submitList(list)
-//        binding.rvHistoryPinjaman.adapter = adapter
     }
 
 
-    private fun getHistoryPinjamanData(): ArrayList<HistoryPinjamanModel> {
-        val nominalGaji = resources.getStringArray(R.array.history_pinjaman_gaji)
-        val historyPinjamanBulanan = resources.getStringArray(R.array.history_pinjaman_bulanan)
-        val historyPinjamanTenor = resources.getStringArray(R.array.history_pinjaman_tenor)
-        val uniqueID = resources.getStringArray(R.array.history_pinjaman_id)
-
-        val listDatas = ArrayList<HistoryPinjamanModel>()
-        for (i in uniqueID.indices) {
-            val data = HistoryPinjamanModel(
-                uniqueID[i],
-                nominalGaji[i],
-                historyPinjamanBulanan[i],
-                historyPinjamanTenor[i]
-            )
-            listDatas.add(data)
-        }
-        return listDatas
-    }
 }

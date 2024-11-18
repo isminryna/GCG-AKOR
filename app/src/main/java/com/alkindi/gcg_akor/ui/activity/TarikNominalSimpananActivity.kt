@@ -1,6 +1,7 @@
 package com.alkindi.gcg_akor.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.alkindi.gcg_akor.data.local.model.simpTypeWNominal
+import com.alkindi.gcg_akor.data.local.model.ProcessedTarikSimp
+import com.alkindi.gcg_akor.data.local.model.SimpTypeWNominal
 import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.ActivityTarikNominalSimpananBinding
 import com.alkindi.gcg_akor.ui.viewmodel.TarikNominalSimpananViewModel
@@ -25,6 +27,9 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTarikNominalSimpananBinding
     private lateinit var userMBRID: String
     private lateinit var tipeTransaksi: String
+    private lateinit var extraData: ProcessedTarikSimp
+
+
     private val tarikNominalSimpananViewModel: TarikNominalSimpananViewModel by viewModels {
         ViewModelFactory.getInstance(application)
     }
@@ -46,11 +51,11 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         checkLoading()
         chipButtonLogic()
         getUserMBRID()
+        getTarikSimpananAPIResponse()
 
         binding.btnBack.setOnClickListener {
             finish()
         }
-
 
         binding.layoutCatatan.setOnClickListener {
             binding.edtCatatan.requestFocus()
@@ -60,6 +65,33 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
 
         binding.btnConfirmTarikSimpanan.setOnClickListener {
             confirmTarikSimpanan()
+
+        }
+    }
+
+    private fun getTarikSimpananAPIResponse() {
+        tarikNominalSimpananViewModel.tarikNominalSimpananResponse.observe(this) { res ->
+            if (res.code == 200) {
+//                docnum = res.docnum!!
+                AndroidUIHelper.showWarningToastShort(this, "Tarik Simpanan Berhasil")
+                ProcessedTarikSimp(
+                    "",
+                    "",
+                    "",
+                    res.docnum.toString()
+                )
+                val toConfirmPage = Intent(
+                    this@TarikNominalSimpananActivity,
+                    TarikSimpananProcessedActivity::class.java
+                ).putExtra(TarikSimpananProcessedActivity.EXTRA_PROCESSED_TARIK_SIMP, extraData)
+                startActivity(toConfirmPage)
+            } else {
+                AndroidUIHelper.showAlertDialog(
+                    this,
+                    "ERROR ${res.code}: Tidak Dapat Melakukan Tarik Simpanan",
+                    "${res.message}"
+                )
+            }
         }
     }
 
@@ -85,16 +117,14 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
 
     private fun confirmTarikSimpanan() {
         val nominal = binding.tvNominalTarikSimpanan.text.toString()
-        val convertedNominal =FormatterAngka.formatterRibuanKeInt(nominal)
+        val convertedNominal = FormatterAngka.formatterRibuanKeInt(nominal)
         val tipeSimpanan = binding.tvTypeSimpanan.text
         val catatanTransaksi = binding.edtCatatan.text.toString()
         val simpananYgTersedia = binding.tvNominalTipeSimpanan.text.toString()
-        val convertedNominalYgTersedia =FormatterAngka.formatterRibuanKeInt(simpananYgTersedia)
-
-//        TODO: SELESAIKAN INPUT TRANSAKSI KE TABEL
-        val tglSaatIni =Date()
+        val convertedNominalYgTersedia = FormatterAngka.formatterRibuanKeInt(simpananYgTersedia)
+        val tglSaatIni = Date()
         val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
-        val formattedDate =dateFormatter.format(tglSaatIni)
+        val formattedDate = dateFormatter.format(tglSaatIni)
         when (tipeSimpanan) {
             "Simpanan Sukarela" -> {
                 tipeTransaksi = "SS"
@@ -119,13 +149,19 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
             convertedNominalYgTersedia.toString(),
             formattedDate
         )
+        extraData = ProcessedTarikSimp(
+            tipeTransaksi,
+            nominal,
+            formattedDate,
+            ""
+        )
     }
 
     private fun getDataFromPreviousActivity() {
         val simpData = if (Build.VERSION.SDK_INT >= 33) {
-            intent.getParcelableExtra<simpTypeWNominal>(
+            intent.getParcelableExtra<SimpTypeWNominal>(
                 EXTRA_SIMP_TYPE,
-                simpTypeWNominal::class.java
+                SimpTypeWNominal::class.java
             )
         } else {
             @Suppress("DEPRECATION")
@@ -162,6 +198,7 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         val nilaiChip = chip.text.toString().replace("Rp", "").replace(".", "").replace(" ", "")
         val formattedValue = FormatterAngka.formatterAngkaRibuan(nilaiChip.toInt())
         binding.tvNominalTarikSimpanan.text = formattedValue
+        binding.btnConfirmTarikSimpanan.visibility = View.VISIBLE
     }
 
     private fun logicAturNominal() {
@@ -183,6 +220,7 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         binding.tvNominalTarikSimpanan.text = FormatterAngka.formatterAngkaRibuan(newNumber)
         if (binding.tvNominalTarikSimpanan.text == "0") {
             binding.btnKurangiNominal.visibility = View.GONE
+            binding.btnConfirmTarikSimpanan.visibility = View.GONE
         }
     }
 
@@ -192,6 +230,7 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
         val newNumber = FormatterAngka.formatterRibuanKeInt(currentNumber) + 10000
         binding.tvNominalTarikSimpanan.text = FormatterAngka.formatterAngkaRibuan(newNumber)
         binding.btnKurangiNominal.visibility = View.VISIBLE
+        binding.btnConfirmTarikSimpanan.visibility = View.VISIBLE
     }
 
     companion object {

@@ -15,7 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
@@ -437,11 +436,11 @@
                             android:layout_height="wrap_content" />
 
                         <TextView
-                            android:id="@+id/tvProvinsi"
+                            android:id="@+id/tvProvisi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Provinsi" />
+                            android:text="Provisi" />
 
                         <EditText
                             android:id="@+id/edtProvinsi"

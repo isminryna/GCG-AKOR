@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alkindi.gcg_akor.data.local.di.Injection
 import com.alkindi.gcg_akor.data.repository.UserRepository
+import com.alkindi.gcg_akor.ui.viewmodel.DetailHistoryPinjamanViewModel
+import com.alkindi.gcg_akor.ui.viewmodel.DetailSimpananFragmentViewModel
+import com.alkindi.gcg_akor.ui.viewmodel.EditProfileViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.HistoryPinjamanViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.HomeViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.LoginViewModel
@@ -14,6 +17,7 @@ import com.alkindi.gcg_akor.ui.viewmodel.PinjamanViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.ProfileViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.RiwayatTransaksiFragmentViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.TarikNominalSimpananViewModel
+import com.alkindi.gcg_akor.ui.viewmodel.TarikSimpananProcessedViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.TarikSimpananViewModel
 
 class ViewModelFactory private constructor(
@@ -61,7 +65,18 @@ class ViewModelFactory private constructor(
             modelClass.isAssignableFrom(HistoryPinjamanViewModel::class.java)->{
                 HistoryPinjamanViewModel(userRepository) as T
             }
-
+            modelClass.isAssignableFrom(TarikSimpananProcessedViewModel::class.java)->{
+                TarikSimpananProcessedViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailSimpananFragmentViewModel::class.java)->{
+                DetailSimpananFragmentViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailHistoryPinjamanViewModel::class.java)->{
+                DetailHistoryPinjamanViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(EditProfileViewModel::class.java)->{
+                EditProfileViewModel(userRepository) as T
+            }
             else -> throw IllegalArgumentException("Unknown Viewmodel Class: ${modelClass.name}")
         }
     }

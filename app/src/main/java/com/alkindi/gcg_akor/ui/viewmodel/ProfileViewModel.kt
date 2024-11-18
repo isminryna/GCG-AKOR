@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.alkindi.gcg_akor.data.local.model.UserModel
-import com.alkindi.gcg_akor.data.remote.response.UserProfileResponseItem
+import com.alkindi.gcg_akor.data.remote.response.ExtUserProfileResponse
 import com.alkindi.gcg_akor.data.remote.retrofit.ApiConfig
 import com.alkindi.gcg_akor.data.repository.UserRepository
 import com.alkindi.gcg_akor.utils.ApiNetworkingUtils
@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
-    private val _profileDataResponse = MutableLiveData<List<UserProfileResponseItem>>()
-    val profileDataResponse: LiveData<List<UserProfileResponseItem>> = _profileDataResponse
+    private val _profileDataResponse = MutableLiveData<ExtUserProfileResponse>()
+    val profileDataResponse: LiveData<ExtUserProfileResponse> = _profileDataResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -33,13 +33,13 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                 try {
                     val apiService = ApiConfig.getApiService()
                     val data = mapOf(
-                        "username" to username.uppercase()
+                        "userId" to username.uppercase()
                     )
                     val encodedJson = ApiNetworkingUtils.jsonFormatter(data)
-//                    val apiCode ="KvRnqbr%2BktvsOVY89qJvEdkJAcJmFdyI7GQ98Ln6DH4%3D"
+                    val apiCode ="KvRnqbr%2Bktu7HRDvQttp6LEdk0Nmqoyg7GQ98Ln6DH4%3D"
                     val fullUrl =
-                        "${ApiConfig.BASE_URL_KOPEGMAR}txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=YPNRO;rc=KvRnqbr%2BktvsOVY89qJvEdkJAcJmFdyI7GQ98Ln6DH4%3D;vars=${encodedJson}"
-                    val response = apiService.getProfile(fullUrl)
+                        "${ApiConfig.BASE_URL_KOPEGMAR}txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=YPNRO;rc=${apiCode};vars=${encodedJson}"
+                    val response = apiService.getProfileExt(fullUrl)
                     Log.d(TAG, "Profile Data API Response: $response")
                     Log.d(TAG, "Encoded Json Data: $encodedJson")
                     _profileDataResponse.value = response

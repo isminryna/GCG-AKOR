@@ -1,5 +1,8 @@
 package com.alkindi.gcg_akor.data.remote.retrofit
 
+import com.alkindi.gcg_akor.data.remote.response.DetailHistoryPinjamanResponse
+import com.alkindi.gcg_akor.data.remote.response.DetailSimpananResponse
+import com.alkindi.gcg_akor.data.remote.response.ExtUserProfileResponse
 import com.alkindi.gcg_akor.data.remote.response.HistoryPinjamanResponse
 import com.alkindi.gcg_akor.data.remote.response.HistoryTarikSimpResponse
 import com.alkindi.gcg_akor.data.remote.response.LoginResponse
@@ -7,12 +10,11 @@ import com.alkindi.gcg_akor.data.remote.response.NominalSimpananResponse
 import com.alkindi.gcg_akor.data.remote.response.PersonalDataResponse
 import com.alkindi.gcg_akor.data.remote.response.TarikNominalSimpananResponse
 import com.alkindi.gcg_akor.data.remote.response.TipePotonganResponse
-import com.alkindi.gcg_akor.data.remote.response.UserProfileResponseItem
+import com.alkindi.gcg_akor.data.remote.response.UpdateProfileResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Url
 
 interface ApiService {
@@ -28,13 +30,10 @@ interface ApiService {
         @Field("urifie") urifie: String
     ): LoginResponse
 
-
-    //    @GET("txn?fnc=runLib;opic=79ipFwZR44YmvtrR1M1t9A;csn=YPNRO;rc=KvRnqbr%2BktvsOVY89qJvEdkJAcJmFdyI7GQ98Ln6DH4%3D;")
     @GET
-    suspend fun getProfile(
-//        @Query("vars") username: String
+    suspend fun getProfileExt(  // New getProfile API endpoint
         @Url fullUrl: String = ApiConfig.BASE_URL_KOPEGMAR
-    ): List<UserProfileResponseItem>
+    ): ExtUserProfileResponse
 
     @GET
     suspend fun getPersonal(
@@ -61,11 +60,27 @@ interface ApiService {
         @Url fullUrl: String
     ): HistoryPinjamanResponse
 
+    @GET
+    suspend fun getDetailSimpanan(
+        @Url fullUrl: String
+    ): DetailSimpananResponse
+
+    @GET
+    suspend fun getDetailHistoryPinjaman(
+        @Url fullUrl: String
+    ): DetailHistoryPinjamanResponse
+
     @FormUrlEncoded
-    @POST("https://kopegmar.gcgakor.id/txn?fnc=runLib;opic=iJRj9e2v1xIL1ib2xkM4A;csn=YPNRO;rc=NU5mgOhAZUGhJ24WH1zuqwTnRtBFfK6y6OVw0Q2/ZWSE2T%2BDBSLsen/SgBttLGZS")
+    @POST("https://kopegmar.gcgakor.id/txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=${ApiConfig.WORKSPACE_CODE_KOPEGMAR};rc=NU5mgOhAZUGhJ24WH1zuqwTnRtBFfK6y6OVw0Q2/ZWSE2T%2BDBSLsen/SgBttLGZS")
     suspend fun postTarikSimpanan(
-//        @Url fullUrl: String,
-        @Field("argt") argt: String ="vars",
+        @Field("argt") argt: String = "vars",
         @Field("argl") argl: String
     ): TarikNominalSimpananResponse
+
+    @FormUrlEncoded
+    @POST("https://kopegmar.gcgakor.id/txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=${ApiConfig.WORKSPACE_CODE_KOPEGMAR};rc=KvRnqbr%2Bktu7HRDvQttp6MRyn3VICeItrNiEgAa5Ce0%3D")
+    suspend fun updateProfileData(
+        @Field("argt") argt: String = "vars",
+        @Field("argl") argl: String
+    ): UpdateProfileResponse
 }

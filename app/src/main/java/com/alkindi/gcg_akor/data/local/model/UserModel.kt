@@ -10,7 +10,27 @@ data class UserModel(
 )
 
 @Parcelize
-data class simpTypeWNominal(
+data class SimpTypeWNominal(
     val tipeSimpanan: String,
     val nominal: String
-):Parcelable
+) : Parcelable
+
+@Parcelize
+data class PinjDocnum(
+    val docNum: String
+) : Parcelable
+
+@Parcelize
+data class ProcessedTarikSimp(
+    val tipeSimpanan: String?,
+    val nominal: String?,
+    val tglTransaksi: String?,
+    val docnum: String?
+) : Parcelable
+
+@Parcelize
+data class UserProfile(
+    val namaUser: String?,
+    val emailUser: String?,
+    val noHPUser: String?
+) : Parcelable

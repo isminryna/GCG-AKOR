@@ -227,7 +227,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtAdministrasi?.visibility = View.VISIBLE
                 binding.tvAsuransi?.visibility = View.VISIBLE
                 binding.edtAsuransi?.visibility = View.VISIBLE
-                binding.tvProvinsi?.visibility = View.VISIBLE
+                binding.tvProvisi?.visibility = View.VISIBLE
                 binding.edtProvinsi?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
@@ -249,7 +249,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtAdministrasi?.visibility = View.VISIBLE
                 binding.tvAsuransi?.visibility = View.VISIBLE
                 binding.edtAsuransi?.visibility = View.VISIBLE
-                binding.tvProvinsi?.visibility = View.VISIBLE
+                binding.tvProvisi?.visibility = View.VISIBLE
                 binding.edtProvinsi?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
@@ -273,7 +273,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtAdministrasi?.visibility = View.GONE
                 binding.tvAsuransi?.visibility = View.GONE
                 binding.edtAsuransi?.visibility = View.GONE
-                binding.tvProvinsi?.visibility = View.GONE
+                binding.tvProvisi?.visibility = View.GONE
                 binding.edtProvinsi?.visibility = View.GONE
             }
 
@@ -287,7 +287,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtAdministrasi?.visibility = View.VISIBLE
                 binding.tvAsuransi?.visibility = View.VISIBLE
                 binding.edtAsuransi?.visibility = View.VISIBLE
-                binding.tvProvinsi?.visibility = View.VISIBLE
+                binding.tvProvisi?.visibility = View.VISIBLE
                 binding.edtProvinsi?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
@@ -311,7 +311,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtSimpananPagu?.visibility = View.GONE
                 binding.tvAdministrasi?.visibility = View.GONE
                 binding.edtAdministrasi?.visibility = View.GONE
-                binding.tvProvinsi?.visibility = View.GONE
+                binding.tvProvisi?.visibility = View.GONE
                 binding.edtProvinsi?.visibility = View.GONE
             }
 

@@ -2,6 +2,7 @@ package com.alkindi.gcg_akor.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.ActivityHomeBinding
 import com.alkindi.gcg_akor.ui.adapter.RiwayatTransaksiHomeAdapter
 import com.alkindi.gcg_akor.ui.viewmodel.HomeViewModel
+import com.alkindi.gcg_akor.utils.AndroidUIHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -23,6 +25,7 @@ class HomeActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(application)
     }
     private val list = ArrayList<RiwayatTransaksiHomeModel>()
+    private var pressedBack = false
     private lateinit var binding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +67,10 @@ class HomeActivity : AppCompatActivity() {
 
 //        checkSavedSession()
         getRvData()
+        this.onBackPressedDispatcher.addCallback(
+            this,
+            doubleBackPressedOnce
+        )
     }
 
 //    private fun checkSavedSession() {
@@ -77,6 +84,7 @@ class HomeActivity : AppCompatActivity() {
         adapter.submitList(list)
         binding.rvRiwayatTransaksiHome.adapter = adapter
     }
+
 
     private fun getRiwayatTransaksiData(): ArrayList<RiwayatTransaksiHomeModel> {
         val sdf = SimpleDateFormat("dd-MM-yyyy", Locale("id", "ID"))
@@ -97,5 +105,20 @@ class HomeActivity : AppCompatActivity() {
             listDatas.add(data)
         }
         return listDatas
+    }
+
+    private val doubleBackPressedOnce = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (pressedBack) {
+                finishAffinity()
+            } else {
+                pressedBack = true
+                AndroidUIHelper.showWarningToastShort(
+                    this@HomeActivity,
+                    "Tekan BACK kembali untuk keluar dari aplikasi"
+                )
+            binding.root.postDelayed({pressedBack =false},2000)
+            }
+        }
     }
 }

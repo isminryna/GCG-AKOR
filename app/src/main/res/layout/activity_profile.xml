@@ -163,31 +163,15 @@
                         android:textSize="10sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/btnEditProfil"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:text="Edit Profil"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/baseline_lock_profile" />
-
-                    <EditText
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Kata Sandi"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp" />
+<!--                <Space-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp" />-->
 
                 <ImageButton
                     android:id="@+id/btnLogout"

@@ -32,9 +32,6 @@ class RiwayatTransaksiFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentRiwayatTransaksiBinding.inflate(inflater, container, false)
         val view = binding.root
-//        riwayatTransaksiFragmentViewModel.getSession().observe(viewLifecycleOwner) {
-//            userID = it.username
-//        }
         showListRiwayat()
         return view
     }
@@ -78,46 +75,6 @@ class RiwayatTransaksiFragment : Fragment() {
         } else {
             binding.progressBar.visibility = View.GONE
         }
-    }
-
-    private fun getRiwayatData() {
-        riwayatTransaksiFragmentViewModel.historyTarikSimpResponse.observe(viewLifecycleOwner) { resp ->
-            val jenisTransaksi = resp[0].stp ?: "Kosong"
-            val nominal = resp[0].amount ?: "Kosong"
-            val transactionDate = resp[0].transDate ?: "Kosong"
-            val transDoc = resp[0].docNum ?: "Kosong"
-
-            val listRiwayat = ArrayList<RiwayatTransaksiModel>()
-
-            val data = RiwayatTransaksiModel(
-                jenisTransaksi,
-                transDoc,
-                nominal,
-                transactionDate
-            )
-            list.add(data)
-        }
-
-//        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale("id", "ID"))
-//        val currentDate = sdf.format(Date())
-//
-//        val jenisTransaksi = resources.getStringArray(R.array.jenis_transaksi)
-//        val tipeTransaksi = resources.getStringArray(R.array.tipe_transaksi)
-//        val idTransaksi = resources.getStringArray(R.array.id_transaksi)
-//        val nominalTransaksi = resources.getStringArray(R.array.nominal)
-//
-//        val listRiwayat = ArrayList<RiwayatTransaksiModel>()
-//        for (i in jenisTransaksi.indices) {
-//            val data = RiwayatTransaksiModel(
-//                jenisTransaksi[i],
-////                tipeTransaksi[i],
-//                idTransaksi[i],
-//                nominalTransaksi[i],
-//                currentDate
-//            )
-//            listRiwayat.add(data)
-//        }
-//        return listRiwayat
     }
 
 }

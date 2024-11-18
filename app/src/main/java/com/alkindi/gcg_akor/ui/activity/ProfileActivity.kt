@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.alkindi.gcg_akor.data.local.model.UserProfile
 import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.ActivityProfileBinding
 import com.alkindi.gcg_akor.ui.viewmodel.ProfileViewModel
@@ -15,6 +16,7 @@ import com.alkindi.gcg_akor.ui.viewmodel.ProfileViewModel
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var userID: String
+    private lateinit var extraData: UserProfile
     private val profileViewModel: ProfileViewModel by viewModels {
         ViewModelFactory.getInstance(application)
     }
@@ -30,13 +32,20 @@ class ProfileActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         checkLoading()
         getProfileData()
         checkFetchedData()
         binding.btnLogout.setOnClickListener {
             profileViewModel.deleteUserSession(userID)
             logOut()
+        }
+
+        binding.btnEditProfil.setOnClickListener {
+            val toEditProfile =
+                Intent(this@ProfileActivity, EditProfileActivity::class.java).putExtra(
+                    EditProfileActivity.EXTRA_ID, extraData
+                )
+            startActivity(toEditProfile)
         }
 
     }
@@ -47,23 +56,31 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoading(isLoading: Boolean) =
-        if (isLoading) binding.progressBar.visibility =
-            View.VISIBLE else binding.progressBar.visibility = View.GONE
+    private fun showLoading(isLoading: Boolean) = if (isLoading) binding.progressBar.visibility =
+        View.VISIBLE else binding.progressBar.visibility = View.GONE
 
 
     private fun checkFetchedData() {
         profileViewModel.profileDataResponse.observe(this) { resp ->
-            binding.edtPhone.setText(resp.firstOrNull()?.telp ?: "")
-            binding.edtUserName.setText(resp.firstOrNull()?.fname ?: "")
-            binding.edtEmail.setText(resp.firstOrNull()?.email ?: "")
+            val noHP = resp.data?.telp
+            val namaUser = resp.data?.fname
+            val emailUser = resp.data?.email
 
+            binding.edtPhone.setText(noHP ?: "Kosong")
+            binding.edtUserName.setText(namaUser ?: "Kosong")
+            binding.edtEmail.setText(emailUser ?: "Kosong")
+
+            extraData = UserProfile(
+                namaUser,
+                emailUser,
+                noHP
+            )
         }
     }
 
     private fun getProfileData() {
         profileViewModel.getSession().observe(this) {
-            userID =it.username
+            userID = it.username
             profileViewModel.getUserProfileData(it.username)
         }
     }

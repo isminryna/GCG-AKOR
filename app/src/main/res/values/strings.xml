@@ -40,6 +40,8 @@
     <string name="text_garis_pembatas">-----------------------------------------------------------</string>
     <string name="rp_with_space">Rp</string>
     <string name="txt_pilih_tmbl">Pilih</string>
+    <string name="txt_edit_profil">Edit Profil</string>
+    <string name="txt_sandi_yang_diketik_ulang_tidak_sama">Sandi yang diketik ulang tidak sama!</string>
 
 
     <!--    Untuk digunakan pada recycleview history pinjaman -->

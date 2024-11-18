@@ -5,57 +5,59 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.alkindi.gcg_akor.R
-import com.alkindi.gcg_akor.data.model.DetailSimpananModel
+import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.FragmentDetailSimpananBinding
 import com.alkindi.gcg_akor.ui.adapter.DetailSimpananAdapter
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.alkindi.gcg_akor.ui.viewmodel.DetailSimpananFragmentViewModel
 
 
 class DetailSimpananFragment : Fragment() {
-    private val list = ArrayList<DetailSimpananModel>()
     private lateinit var binding: FragmentDetailSimpananBinding
+    private val detailSimpananFragmentViewModel: DetailSimpananFragmentViewModel by viewModels {
+        ViewModelFactory.getInstance(requireActivity())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentDetailSimpananBinding.inflate(inflater, container, false)
         val view = binding.root
-
+        getRVData()
+        checkLoading()
         showRVData()
 
         return view
     }
 
-    private fun showRVData() {
-        binding.rvDetailSimpanan.layoutManager = LinearLayoutManager(requireActivity())
-        list.addAll(getDetailData())
-        val adapter = DetailSimpananAdapter()
-        adapter.submitList(list)
-        binding.rvDetailSimpanan.adapter = adapter
+    private fun getRVData() {
+        detailSimpananFragmentViewModel.getDetailSimpananData("10006", "SK")
     }
 
-    private fun getDetailData(): ArrayList<DetailSimpananModel> {
-        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale("id", "ID"))
-        val currentDate = sdf.format(Date())
-
-        val jenisDana = resources.getStringArray(R.array.tipe_transaksi)
-        val nominal = resources.getStringArray(R.array.nominal)
-
-        val listDetail = ArrayList<DetailSimpananModel>()
-        for (i in jenisDana.indices) {
-            val data = DetailSimpananModel(
-                jenisDana[i],
-                nominal[i],
-                currentDate
-            )
-            listDetail.add(data)
+    private fun checkLoading() {
+        detailSimpananFragmentViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
         }
-        return listDetail
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+
+    private fun showRVData() {
+        binding.rvDetailSimpanan.layoutManager = LinearLayoutManager(requireActivity())
+        val adapter = DetailSimpananAdapter()
+        detailSimpananFragmentViewModel.detailSimpananResponse.observe(viewLifecycleOwner) { res ->
+            adapter.submitList(res.data)
+            binding.rvDetailSimpanan.adapter = adapter
+        }
     }
 
 }
