@@ -10,6 +10,7 @@ import com.alkindi.gcg_akor.data.local.model.UserModel
 import com.alkindi.gcg_akor.data.remote.response.UpdateProfileResponse
 import com.alkindi.gcg_akor.data.remote.retrofit.ApiConfig
 import com.alkindi.gcg_akor.data.repository.UserRepository
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -32,15 +33,17 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ViewMod
         pwKetikUlang: String?
     ) {
         try {
-            val argl = """{
-                    "userID":"$userId",
-                    "userName":"${namaUser ?:""}",
-                    "phoneNumber":"${noHP ?:""}",
-                    "emailAddress":"${emailUser?:""}",
-                    "cp":"${pwLama?:""}",
-                    "np":"${pwBaru?:""}",
-                    "rp":"${pwKetikUlang?:""}"
-                    }""".trimIndent()
+            val jsonMap = mutableMapOf<String, String>()
+            jsonMap["userID"] = userId
+            if (!namaUser .isNullOrEmpty()) jsonMap["userName"] = namaUser
+            if (!noHP.isNullOrEmpty()) jsonMap["phoneNumber"] = noHP
+            if (!emailUser.isNullOrEmpty()) jsonMap["emailAddress"] = emailUser
+            if (!pwLama.isNullOrEmpty()) jsonMap["cp"] = pwLama
+            if (!pwBaru.isNullOrEmpty()) jsonMap["np"] = pwBaru
+            if (!pwKetikUlang.isNullOrEmpty()) jsonMap["rp"] = pwKetikUlang
+
+            // Convert the map to a JSON string
+            val argl = Gson().toJson(jsonMap)
             Log.d(TAG, "Nilai yang ingin diubah: $argl")
             _isLoading.value = true
             viewModelScope.launch {
@@ -48,6 +51,22 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ViewMod
                 val response = apiService.updateProfileData(argl = argl)
                 _updateProfileResponse.value = response
             }
+//            val argl = """{
+//                    "userID":"$userId",
+//                    "userName":"${namaUser ?:""}",
+//                    "phoneNumber":"${noHP ?:""}",
+//                    "emailAddress":"${emailUser?:""}",
+//                    "cp":"${pwLama?:""}",
+//                    "np":"${pwBaru?:""}",
+//                    "rp":"${pwKetikUlang?:""}"
+//                    }""".trimMargin()
+//            Log.d(TAG, "Nilai yang ingin diubah: $argl")
+//            _isLoading.value = true
+//            viewModelScope.launch {
+//                val apiService = ApiConfig.getApiService()
+//                val response = apiService.updateProfileData(argl = argl)
+//                _updateProfileResponse.value = response
+//            }
         } catch (e: Exception) {
             Log.e(TAG, "Update user profile data failed: ${Log.ERROR}")
         } finally {
