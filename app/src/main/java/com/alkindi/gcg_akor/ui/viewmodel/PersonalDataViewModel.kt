@@ -32,17 +32,6 @@ class PersonalDataViewModel(private val userRepository: UserRepository) : ViewMo
                 viewModelScope.launch {
                     _isLoading.value = true
                     userRepository.fetchUserPersonalData(username)
-//                    val apiService = ApiConfig.getApiService()
-//                    val data = mapOf(
-//                        "username" to username.uppercase()
-//                    )
-//                    val encodedData = ApiNetworkingUtils.jsonFormatter(data)
-//                    val apiCode = "gS%2BZtyMBHTdgEoheRgK6hoGn9gB9jdSeepx4X6/t2uDtvQTu57s32w%3D%3D"
-//                    val fullUrl =
-//                        "${ApiConfig.BASE_URL_KOPEGMAR}txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=${ApiConfig.WORKSPACE_CODE_KOPEGMAR};rc=${apiCode};vars=${encodedData}"
-//                    val response = apiService.getPersonal(fullUrl)
-//                    Log.d(TAG, "Personal Data Response: $response")
-//                    _personalDataResponse.value = response
                     _isLoading.value = false
                 }
 

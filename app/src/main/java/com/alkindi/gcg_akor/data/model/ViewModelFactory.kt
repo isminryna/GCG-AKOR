@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.alkindi.gcg_akor.data.local.di.Injection
 import com.alkindi.gcg_akor.data.repository.UserRepository
 import com.alkindi.gcg_akor.ui.viewmodel.DetailHistoryPinjamanViewModel
+import com.alkindi.gcg_akor.ui.viewmodel.DetailPinjamanInfoViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.DetailSimpananFragmentViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.EditProfileViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.HistoryPinjamanViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.HomeViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.LoginViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.MainViewModel
+import com.alkindi.gcg_akor.ui.viewmodel.NominalPinjamanViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.PersonalDataViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.PinjamanViewModel
 import com.alkindi.gcg_akor.ui.viewmodel.ProfileViewModel
@@ -76,6 +78,12 @@ class ViewModelFactory private constructor(
             }
             modelClass.isAssignableFrom(EditProfileViewModel::class.java)->{
                 EditProfileViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(NominalPinjamanViewModel::class.java)->{
+                NominalPinjamanViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailPinjamanInfoViewModel::class.java)->{
+                DetailPinjamanInfoViewModel(userRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown Viewmodel Class: ${modelClass.name}")
         }

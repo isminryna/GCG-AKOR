@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -42,6 +43,13 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.btnConfirmEdit.setOnClickListener {
             sendDataChanges()
+        }
+        binding.btnGantiGambar.setOnClickListener {
+//            cariGambar()
+            galleryLauncher.launch("image/*")
+        }
+        binding.btnBack.setOnClickListener{
+            finish()
         }
     }
 
@@ -141,5 +149,15 @@ class EditProfileActivity : AppCompatActivity() {
     companion object {
         private val TAG = EditProfileActivity::class.java.simpleName
         const val EXTRA_ID = "extra_id"
+    }
+
+   private val galleryLauncher =registerForActivityResult(ActivityResultContracts.GetContent()){
+        val galleryUri =it
+
+        try {
+            binding.imProfile.setImageURI(galleryUri)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }

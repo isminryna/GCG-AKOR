@@ -6,16 +6,16 @@ import java.util.Locale
 
 object FormatterAngka {
 
-    fun  formatterAngkaRibuan(angka: Int): String {
+    fun formatterAngkaRibuan(angka: Int): String {
         val formattedNilai = NumberFormat.getInstance(Locale("ind", "ID"))
         return formattedNilai.format(angka)
     }
 
     fun formatterRibuanKeInt(angka: String): Int {
-        return angka.replace(".", "").replace(" ", "").toInt()
+        return angka.replace(".", "").replace(" ", "").replace(",", "").toInt()
     }
 
-    fun formatterAngkaRibuanDouble(angka: Double): String {
+    fun formatterAngkaRibuanDouble(angka: Double?): String {
         val formattedNilai = NumberFormat.getInstance(Locale("ind", "ID"))
         return formattedNilai.format(angka)
     }
@@ -24,12 +24,17 @@ object FormatterAngka {
         return angka.replace(".", "").replace(" ", "").toDouble()
     }
 
-    fun dateFormatForDetail(dateString: String): String {
-        val inputFormat =SimpleDateFormat("dd-MM-yyyy",Locale("id","ID"))
-        val outputFormat =SimpleDateFormat("dd MMMM yyyy",Locale("id","ID"))
+    fun formatterAngkaRibuanUntukDisplay(angka: Any): String {
+        val formattedNilai = NumberFormat.getInstance(Locale("ind", "ID"))
+        return formattedNilai.format(angka)
+    }
 
-        val date =inputFormat.parse(dateString)
-        return outputFormat.format(date ?:"")
+    fun dateFormatForDetail(dateString: String): String {
+        val inputFormat = SimpleDateFormat("dd-MM-yyyy", Locale("id", "ID"))
+        val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+
+        val date = inputFormat.parse(dateString)
+        return outputFormat.format(date ?: "")
     }
 
 }

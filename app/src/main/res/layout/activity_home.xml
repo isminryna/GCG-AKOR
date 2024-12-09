@@ -78,18 +78,76 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/forNominal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_black"
-                android:text="Rp. 10.000.000"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="30sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTotalPinjaman" />
+                app:layout_constraintTop_toBottomOf="@id/tvTotalPinjaman">
+
+                <TextView
+                    android:id="@+id/tvRp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/poppins_black"
+                    android:text="Rp "
+                    android:textColor="@color/white"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/tvNominalPinjaman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFamily="@font/poppins_black"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvRp"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:autoSizeMaxTextSize="30sp"-->
+            <!--                android:autoSizeMinTextSize="12sp"-->
+            <!--                android:autoSizeStepGranularity="1sp"-->
+            <!--                android:autoSizeTextType="uniform"-->
+            <!--                android:fontFamily="@font/poppins_black"-->
+            <!--                android:text="Rp "-->
+            <!--                android:textColor="@color/white"-->
+            <!--                android:textSize="30sp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/tvTotalPinjaman" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvNominalPinjaman"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:autoSizeMaxTextSize="30sp"-->
+            <!--                android:autoSizeMinTextSize="12sp"-->
+            <!--                android:autoSizeStepGranularity="1sp"-->
+            <!--                android:autoSizeTextType="uniform"-->
+            <!--                android:fontFamily="@font/poppins_black"-->
+            <!--                android:text="0"-->
+            <!--                android:textAlignment="center"-->
+            <!--                android:textColor="@color/white"-->
+            <!--                android:textSize="30sp"-->
+
+            <!--                app:layout_constraintStart_toEndOf="@+id/tvRp"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tvTotalPinjaman" />-->
 
             <ImageView
                 android:id="@+id/btnTambahPinjaman"
@@ -100,7 +158,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/forNominal" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -266,5 +324,14 @@
             tools:listitem="@layout/rv_riwayattransaksi_home_card" />
     </ScrollView>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

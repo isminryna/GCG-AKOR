@@ -64,7 +64,7 @@ data class HistoryPinjamanItem(
 	@field:SerializedName("dana_cair")
 	val danaCair: Any? = null,
 
-	@field:SerializedName("apr")
+	@field:SerializedName("aprinfo")
 	val apr: String? = null,
 
 	@field:SerializedName("jakhu")

@@ -1,24 +1,24 @@
 package com.alkindi.gcg_akor.ui.activity
 
-import android.app.Activity
+import android.R
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.alkindi.gcg_akor.data.local.model.InputtedBiayaPot
 import com.alkindi.gcg_akor.data.model.ViewModelFactory
+import com.alkindi.gcg_akor.data.remote.response.TenorListItem
 import com.alkindi.gcg_akor.data.remote.response.TipePotonganItem
 import com.alkindi.gcg_akor.databinding.ActivityPinjamanBinding
 import com.alkindi.gcg_akor.ui.viewmodel.PinjamanViewModel
@@ -29,9 +29,9 @@ import kotlinx.coroutines.launch
 
 class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: ActivityPinjamanBinding
-    private lateinit var filePickerSlipGaji: ActivityResultLauncher<Intent>
-    private lateinit var filePickerSlipBonus: ActivityResultLauncher<Intent>
-    private lateinit var filePickerSlipGaji3: ActivityResultLauncher<Intent>
+    private lateinit var userID: String
+    private var tipePinjaman: String = ""
+    private var selectedTenor: String = ""
     private val pinjamanViewModel: PinjamanViewModel by viewModels {
         ViewModelFactory.getInstance(application)
     }
@@ -48,62 +48,198 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             insets
         }
 
+        getSession()
         btnAturNominalLogic()
         chipButtonLogic()
         checkLoading()
         observeTipePotonganData()
+        observeListTenor()
 
         binding.btnBack.setOnClickListener {
             finish()
         }
+
+
         binding.btnLanjutkan?.setOnClickListener {
-            val toInputNominal = Intent(this@PinjamanActivity, NominalPinjamanActivity::class.java)
-            startActivity(toInputNominal)
+            if (tipePinjaman == "RUMAH") {
+                if (!binding.edtNominalPotongan?.text.isNullOrEmpty() && !binding.edtPotonganPribadi?.text.isNullOrEmpty() && !binding.edtNoAtasan?.text.isNullOrEmpty() && !binding.edtTenor?.text.isNullOrEmpty()) {
+                    toInputNominalPinjaman()
+                } else {
+                    AndroidUIHelper.showWarningToastShort(
+                        this, "Silahkan isi semua field yang telah disediakan"
+                    )
+                    return@setOnClickListener
+                }
+            } else if (tipePinjaman == "MOTOR") {
+                if (!binding.edtNominalPotongan?.text.isNullOrEmpty() && !binding.edtPotonganPribadi?.text.isNullOrEmpty() && !binding.edtNoAtasan?.text.isNullOrEmpty() && !binding.edtTenor?.text.isNullOrEmpty()) {
+                    toInputNominalPinjaman()
+                } else {
+                    AndroidUIHelper.showWarningToastShort(
+                        this, "Silahkan isi semua field yang telah disediakan"
+                    )
+                    return@setOnClickListener
+                }
+            } else {
+                if (!binding.edtNominalPotongan?.text.isNullOrEmpty() && !binding.edtPotonganPribadi?.text.isNullOrEmpty() && !binding.edtNoAtasan?.text.isNullOrEmpty()) {
+                    toInputNominalPinjaman()
+                } else {
+                    AndroidUIHelper.showWarningToastShort(
+                        this, "Silahkan isi semua field yang telah disediakan"
+                    )
+                }
+            }
+
+
         }
 
         binding.spinnerTipePinjaman?.onItemSelectedListener = this
 
-        filePickerSlipBonus =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-                if (res.resultCode == Activity.RESULT_OK && res.data != null) {
-                    res.data?.data?.let { uri ->
-                        val fileName = getFileName(uri)
-                        binding.edtSlipBonusFilename?.setText(fileName)
-                    }
+
+    }
+
+    private fun observeListTenor() {
+        pinjamanViewModel.listTenor.observe(this) { res ->
+            res.let {
+                if (res.code == 200 && res.data != null) {
+                    addTenorList(it.data)
                 }
             }
-
-        filePickerSlipGaji =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-                if (res.resultCode == Activity.RESULT_OK && res.data != null) {
-                    res.data?.data?.let { uri ->
-                        val filename = getFileName(uri)
-                        binding.edtSlipGajiFileName?.setText(filename)
-                    }
-                }
-            }
-
-        filePickerSlipGaji3 =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-                if (res.resultCode == Activity.RESULT_OK && res.data != null) {
-                    res.data?.data?.let { uri ->
-                        val filename = getFileName(uri)
-                        binding.edtSlipGaji3Filename?.setText(filename)
-                    }
-                }
-            }
-
-        binding.btnUploadSlipGaji?.setOnClickListener {
-//            openFilePickerForUploadSlipGaji()
-        }
-
-        binding.btnUploadSlipBonus?.setOnClickListener {
-//            openFilePickerForUploadSlipBonus()
-        }
-        binding.btnUploadGaji3?.setOnClickListener {
-//            openFilePickerForUploadGaji3()
         }
     }
+
+    private fun addTenorList(data: List<TenorListItem?>?) {
+        val listTenorValue =
+            data?.mapNotNull { it?.tenor?.let { Pair(it.toInt().toString(), it) } } ?: emptyList()
+        val spinnerAdapter = object : ArrayAdapter<String>(this,
+            R.layout.simple_spinner_item,
+            listTenorValue.map { it.first }) {
+            override fun getDropDownView(
+                position: Int, convertView: View?, parent: ViewGroup
+            ): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                (view as TextView).text = listTenorValue[position].first
+                return view
+            }
+        }
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTenor?.adapter = spinnerAdapter
+        binding.spinnerTenor?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                listTenorValue[position]
+                selectedTenor = listTenorValue[position].second.toString()
+                Log.d(TAG, "Selected Value: $selectedTenor")
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+    }
+
+    private fun toInputNominalPinjaman() {
+        val nomTipePotongan = binding.edtNominalPotongan?.text.toString().replace(",", "")  //sal
+        val nomPotPribadi = binding.edtPotonganPribadi?.text.toString().replace(",", "") //pot
+//        val nomJmlPinjaman = binding.edtJmlPinjaman?.text.toString().replace(",","")    //am
+        val noAtasan = binding.edtNoAtasan?.text.toString()
+        val mbrid = userID
+        val tipePinjaman = tipePinjaman //lon
+        val tipePotongan = binding.spinnerTipePotongan?.selectedItem.toString()
+//        val tenorPinjaman = binding.spinnerTenor?.selectedItem.toString() //term
+        val tenorPinjaman = selectedTenor
+        val tglPencairan = binding.edtTglPencairan?.text.toString()
+        val edtTenorPinjaman = binding.edtTenor?.text.toString()
+        val tglBonus = binding.edtTglBonus?.text.toString()
+
+        if (tipePinjaman == "RUMAH") {
+            val extraData = InputtedBiayaPot(
+                tipePinjaman,
+                tipePotongan,
+                nomTipePotongan,
+                nomPotPribadi,
+                noAtasan,
+                edtTenorPinjaman,
+                tglPencairan,
+                tglBonus,
+                null
+            )
+            val toInputNominal = Intent(this@PinjamanActivity, NominalPinjamanActivity::class.java)
+            toInputNominal.putExtra(NominalPinjamanActivity.EXTRA_DATA, extraData)
+            startActivity(toInputNominal)
+        } else if (tipePinjaman == "MOTOR") {
+            val extraData = InputtedBiayaPot(
+                tipePinjaman,
+                tipePotongan,
+                nomTipePotongan,
+                nomPotPribadi,
+                noAtasan,
+                edtTenorPinjaman,
+                tglPencairan,
+                tglBonus,
+                null
+            )
+            val toInputNominal = Intent(this@PinjamanActivity, NominalPinjamanActivity::class.java)
+            toInputNominal.putExtra(NominalPinjamanActivity.EXTRA_DATA, extraData)
+            startActivity(toInputNominal)
+        } else {
+            val extraData = InputtedBiayaPot(
+                tipePinjaman,
+                tipePotongan,
+                nomTipePotongan,
+                nomPotPribadi,
+                noAtasan,
+                tenorPinjaman,
+                tglPencairan,
+                tglBonus,
+                null
+            )
+            val toInputNominal = Intent(this@PinjamanActivity, NominalPinjamanActivity::class.java)
+            toInputNominal.putExtra(NominalPinjamanActivity.EXTRA_DATA, extraData)
+            startActivity(toInputNominal)
+        }
+
+    }
+
+//    private fun getBiayaAdministrasi() {
+//        pinjamanViewModel.hitungAdmResponse.observe(this){ res ->
+//            val nominalBiayaAdminstrasi =res.data?.adm.toString()
+//            val nominalAsuransiBln =res.data?.asuransi.toString()
+//            val nominalProvisi =res.data?.provisi.toString()
+//
+//            binding.edtAdministrasi?.setText(nominalBiayaAdminstrasi)
+//            binding.edtAsuransi?.setText(nominalAsuransiBln)
+//            binding.edtProvisi?.setText(nominalProvisi)
+//        }
+//    }
+
+    private fun getSession() {
+        pinjamanViewModel.getSession().observe(this) {
+            userID = it.username
+        }
+    }
+
+//    private fun hitungBiayaAdministrasi() {
+//        val nomTipePotongan = binding.edtNominalPotongan?.text.toString().replace(",","")  //sal
+//        val nomPotPribadi = binding.edtPotonganPribadi?.text.toString().replace(",","") //pot
+////        val nomJmlPinjaman = binding.edtJmlPinjaman?.text.toString().replace(",","")    //am
+//        val mbrid = userID
+//        val tipePinjaman = tipePinjaman //lon
+//        val tenorPinjaman = binding.spinnerTenor?.selectedItem //term
+//
+//
+//        lifecycleScope.launch {
+//            pinjamanViewModel.hitungAdmPinjaman(
+//                tipePinjaman,
+//                nomJmlPinjaman,
+//                tenorPinjaman.toString(),
+//                mbrid,
+//                nomTipePotongan,
+//                nomPotPribadi
+//            )
+//        }
+//
+//    }
 
     private fun observeTipePotonganData() {
         pinjamanViewModel.listPotonganResponse.observe(this) { resp ->
@@ -120,8 +256,8 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
     private fun addSpinnerData(data: List<TipePotonganItem?>) {
         val listPitCode = data.mapNotNull { it?.pitcode }
 
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listPitCode)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val spinnerAdapter = ArrayAdapter(this, R.layout.simple_spinner_item, listPitCode)
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.spinnerTipePotongan?.adapter = spinnerAdapter
     }
 
@@ -142,22 +278,6 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             binding.progressBar?.visibility = View.GONE
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
-    }
-
-    private fun getFileName(uri: Uri): String {
-        var result: String? = null
-        if (uri.scheme == "content") {
-            val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
-            cursor?.use {
-                if (it.moveToFirst()) {
-                    val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    if (nameIndex >= 0) {
-                        result = it.getString(nameIndex)
-                    }
-                }
-            }
-        }
-        return result ?: uri.path?.substringAfterLast('/') ?: "Unknown"
     }
 
     private fun btnAturNominalLogic() {
@@ -218,7 +338,9 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             "Jangka Panjang" -> {
                 lifecycleScope.launch {
                     pinjamanViewModel.getTipePotonganList("JAPAN")
+                    pinjamanViewModel.getTenorList("JAPAN")
                 }
+                tipePinjaman = "JAPAN"
                 binding.tvSimpananPagu?.visibility = View.VISIBLE
                 binding.edtSimpananPagu?.visibility = View.VISIBLE
                 binding.tvSaldoPinjaman?.visibility = View.VISIBLE
@@ -228,19 +350,24 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvAsuransi?.visibility = View.VISIBLE
                 binding.edtAsuransi?.visibility = View.VISIBLE
                 binding.tvProvisi?.visibility = View.VISIBLE
-                binding.edtProvinsi?.visibility = View.VISIBLE
+                binding.edtProvisi?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
                 binding.tvTglPencairan?.visibility = View.GONE
                 binding.edtTglPencairan?.visibility = View.GONE
                 binding.tvTglBonus?.visibility = View.GONE
                 binding.edtTglBonus?.visibility = View.GONE
+
+                binding.spinnerTenor?.visibility = View.VISIBLE
+                binding.edtTenor?.visibility = View.GONE
             }
 
             "Rumah" -> {
                 lifecycleScope.launch {
                     pinjamanViewModel.getTipePotonganList("RUMAH")
+                    pinjamanViewModel.getTenorList("RUMAH")
                 }
+                tipePinjaman = "RUMAH"
                 binding.tvSimpananPagu?.visibility = View.VISIBLE
                 binding.edtSimpananPagu?.visibility = View.VISIBLE
                 binding.tvSaldoPinjaman?.visibility = View.VISIBLE
@@ -250,19 +377,24 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvAsuransi?.visibility = View.VISIBLE
                 binding.edtAsuransi?.visibility = View.VISIBLE
                 binding.tvProvisi?.visibility = View.VISIBLE
-                binding.edtProvinsi?.visibility = View.VISIBLE
+                binding.edtProvisi?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
                 binding.tvTglPencairan?.visibility = View.GONE
                 binding.edtTglPencairan?.visibility = View.GONE
                 binding.tvTglBonus?.visibility = View.GONE
                 binding.edtTglBonus?.visibility = View.GONE
+
+                binding.spinnerTenor?.visibility = View.GONE
+                binding.edtTenor?.visibility = View.VISIBLE
             }
 
             "Kredit Barang" -> {
                 lifecycleScope.launch {
                     pinjamanViewModel.getTipePotonganList("BRANG")
+                    pinjamanViewModel.getTenorList("BRANG")
                 }
+                tipePinjaman = "BRANG"
                 binding.tvSaldoPinjaman?.visibility = View.VISIBLE
                 binding.edtSaldoPinjaman?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
@@ -274,13 +406,18 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvAsuransi?.visibility = View.GONE
                 binding.edtAsuransi?.visibility = View.GONE
                 binding.tvProvisi?.visibility = View.GONE
-                binding.edtProvinsi?.visibility = View.GONE
+                binding.edtProvisi?.visibility = View.GONE
+
+                binding.spinnerTenor?.visibility = View.GONE
+                binding.edtTenor?.visibility = View.VISIBLE
             }
 
             "Mobil" -> {
                 lifecycleScope.launch {
                     pinjamanViewModel.getTipePotonganList("MOBIL")
+                    pinjamanViewModel.getTenorList("MOBIL")
                 }
+                tipePinjaman = "MOBIL"
                 binding.tvSaldoPinjaman?.visibility = View.VISIBLE
                 binding.edtSaldoPinjaman?.visibility = View.VISIBLE
                 binding.tvAdministrasi?.visibility = View.VISIBLE
@@ -288,19 +425,22 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvAsuransi?.visibility = View.VISIBLE
                 binding.edtAsuransi?.visibility = View.VISIBLE
                 binding.tvProvisi?.visibility = View.VISIBLE
-                binding.edtProvinsi?.visibility = View.VISIBLE
+                binding.edtProvisi?.visibility = View.VISIBLE
                 binding.tvDanaDiterima?.visibility = View.VISIBLE
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
                 binding.tvSimpananPagu?.visibility = View.GONE
                 binding.edtSimpananPagu?.visibility = View.GONE
-//                binding.tvSaldoPinjaman?.visibility = View.GONE
-//                binding.edtSaldoPinjaman?.visibility = View.GONE
+
+                binding.spinnerTenor?.visibility = View.VISIBLE
+                binding.edtTenor?.visibility = View.GONE
             }
 
             "Motor" -> {
                 lifecycleScope.launch {
-                    pinjamanViewModel.getTipePotonganList("RUMAH")
+                    pinjamanViewModel.getTipePotonganList("MOTOR")
+                    pinjamanViewModel.getTenorList("MOTOR")
                 }
+                tipePinjaman = "MOTOR"
                 binding.tvSaldoPinjaman?.visibility = View.VISIBLE
                 binding.edtSaldoPinjaman?.visibility = View.VISIBLE
                 binding.tvAsuransi?.visibility = View.VISIBLE
@@ -312,13 +452,18 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvAdministrasi?.visibility = View.GONE
                 binding.edtAdministrasi?.visibility = View.GONE
                 binding.tvProvisi?.visibility = View.GONE
-                binding.edtProvinsi?.visibility = View.GONE
+                binding.edtProvisi?.visibility = View.GONE
+
+                binding.spinnerTenor?.visibility = View.VISIBLE
+                binding.edtTenor?.visibility = View.GONE
             }
 
             "Jangka Pendek" -> {
                 lifecycleScope.launch {
                     pinjamanViewModel.getTipePotonganList("JAPEN")
+                    pinjamanViewModel.getTipePotonganList("JAPEN")
                 }
+                tipePinjaman = "JAPEN"
                 binding.tvSaldoPinjaman?.visibility = View.VISIBLE
                 binding.edtSaldoPinjaman?.visibility = View.VISIBLE
                 binding.tvAdministrasi?.visibility = View.VISIBLE
@@ -329,12 +474,18 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtTglPencairan?.visibility = View.VISIBLE
                 binding.tvTglBonus?.visibility = View.VISIBLE
                 binding.edtTglBonus?.visibility = View.VISIBLE
+                binding.spinnerTenor?.visibility = View.VISIBLE
+                binding.edtTenor?.visibility = View.GONE
             }
         }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
+    }
+
+    companion object {
+        private val TAG = PinjamanActivity::class.java.simpleName
     }
 
 }

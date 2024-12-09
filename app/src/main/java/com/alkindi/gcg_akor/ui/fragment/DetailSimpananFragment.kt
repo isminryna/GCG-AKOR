@@ -11,12 +11,24 @@ import com.alkindi.gcg_akor.data.model.ViewModelFactory
 import com.alkindi.gcg_akor.databinding.FragmentDetailSimpananBinding
 import com.alkindi.gcg_akor.ui.adapter.DetailSimpananAdapter
 import com.alkindi.gcg_akor.ui.viewmodel.DetailSimpananFragmentViewModel
+import com.alkindi.gcg_akor.utils.AndroidUIHelper
 
 
 class DetailSimpananFragment : Fragment() {
     private lateinit var binding: FragmentDetailSimpananBinding
+    private var selectedValue: String? = null
+
+    //    private lateinit var userID: String
     private val detailSimpananFragmentViewModel: DetailSimpananFragmentViewModel by viewModels {
         ViewModelFactory.getInstance(requireActivity())
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            selectedValue = it.getString("selected_val")
+            AndroidUIHelper.showWarningToastShort(requireContext(), selectedValue.toString())
+        }
     }
 
     override fun onCreateView(
@@ -33,7 +45,25 @@ class DetailSimpananFragment : Fragment() {
     }
 
     private fun getRVData() {
-        detailSimpananFragmentViewModel.getDetailSimpananData("10006", "SK")
+        detailSimpananFragmentViewModel.getSession().observe(viewLifecycleOwner) {
+            when (selectedValue) {
+                "Simpanan Khusus" -> {
+                    detailSimpananFragmentViewModel.getDetailSimpananData(it.username, "SK")
+                }
+                "Simpanan Sukarela"->{
+                    detailSimpananFragmentViewModel.getDetailSimpananData(it.username,"SS")
+                }
+                "Simpanan Khusus Pagu"->{
+                    detailSimpananFragmentViewModel.getDetailSimpananData(it.username,"SKP")
+                }
+                "Simpanan Pokok"->{
+                    detailSimpananFragmentViewModel.getDetailSimpananData(it.username,"SP")
+                }
+                "Simpanan Wajib"->{
+                    detailSimpananFragmentViewModel.getDetailSimpananData(it.username,"SW")
+                }
+            }
+        }
     }
 
     private fun checkLoading() {

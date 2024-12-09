@@ -32,12 +32,17 @@ class ProfileActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         checkLoading()
         getProfileData()
         checkFetchedData()
         binding.btnLogout.setOnClickListener {
             profileViewModel.deleteUserSession(userID)
             logOut()
+        }
+
+        binding.btnBack.setOnClickListener {
+            finish()
         }
 
         binding.btnEditProfil.setOnClickListener {
@@ -69,7 +74,7 @@ class ProfileActivity : AppCompatActivity() {
             binding.edtPhone.setText(noHP ?: "Kosong")
             binding.edtUserName.setText(namaUser ?: "Kosong")
             binding.edtEmail.setText(emailUser ?: "Kosong")
-
+            binding.tvIdUser.text = userID
             extraData = UserProfile(
                 namaUser,
                 emailUser,

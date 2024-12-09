@@ -64,22 +64,19 @@ class TarikSimpananActivity : AppCompatActivity() {
         }
 
         binding.btnDetailSimpanan.setOnClickListener {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragmentDetailSimpanan, DetailSimpananFragment(), "frag_detail")
-//                .commit()
 
-            if (setShownFragment){
+            if (setShownFragment) {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentDetailSimpanan, DetailSimpananFragment(),"frag_detail")
+                    .replace(R.id.fragmentDetailSimpanan, DetailSimpananFragment(), "frag_detail")
                     .commit()
-                binding.btnDetailSimpanan.text ="Detail Simpanan"
-            }else{
+                binding.btnDetailSimpanan.text = "Detail Simpanan"
+            } else {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentDetailSimpanan,RiwayatTransaksiFragment(),"frag_detail")
+                    .replace(R.id.fragmentDetailSimpanan, RiwayatTransaksiFragment(), "frag_detail")
                     .commit()
-                binding.btnDetailSimpanan.text ="Riwayat Transaksi"
+                binding.btnDetailSimpanan.text = "Riwayat Transaksi"
             }
-            setShownFragment =!setShownFragment
+            setShownFragment = !setShownFragment
 //            binding.btnDetailSimpanan.text = "Riwayat Simpanan"
         }
 
@@ -130,26 +127,31 @@ class TarikSimpananActivity : AppCompatActivity() {
                             id: Long
                         ) {
                             val selectedItem = parent?.getItemAtPosition(position).toString()
+                            passDataToFragment(selectedItem)
                             val nominal = nominalData[selectedItem] ?: "0"
                             val formattedNominal =
                                 FormatterAngka.formatterAngkaRibuanDouble(nominal.toDouble())
                             binding.tvNominalSimpananSukarela.text = formattedNominal
                             nominalValue = formattedNominal
-                            when(selectedItem){
-                                "Simpanan Pokok"->{
-                                    binding.btnTarikSimpanan.visibility =View.GONE
+                            when (selectedItem) {
+                                "Simpanan Pokok" -> {
+                                    binding.btnTarikSimpanan.visibility = View.GONE
                                 }
-                                "Simpanan Wajib"->{
-                                    binding.btnTarikSimpanan.visibility =View.GONE
+
+                                "Simpanan Wajib" -> {
+                                    binding.btnTarikSimpanan.visibility = View.GONE
                                 }
-                                "Simpanan Khusus Pagu"->{
-                                    binding.btnTarikSimpanan.visibility =View.VISIBLE
+
+                                "Simpanan Khusus Pagu" -> {
+                                    binding.btnTarikSimpanan.visibility = View.VISIBLE
                                 }
-                                "Simpanan Khusus"->{
-                                    binding.btnTarikSimpanan.visibility =View.VISIBLE
+
+                                "Simpanan Khusus" -> {
+                                    binding.btnTarikSimpanan.visibility = View.VISIBLE
                                 }
-                                "Simpanan Sukarela"->{
-                                    binding.btnTarikSimpanan.visibility =View.VISIBLE
+
+                                "Simpanan Sukarela" -> {
+                                    binding.btnTarikSimpanan.visibility = View.VISIBLE
                                 }
                             }
                         }
@@ -170,6 +172,18 @@ class TarikSimpananActivity : AppCompatActivity() {
 //                binding.tvNominalSimpananSukarela.text = nominalValue
         }
 
+    }
+
+    private fun passDataToFragment(selectedValue: String) {
+        val fragment = DetailSimpananFragment()
+
+        val bundle = Bundle()
+        bundle.putString("selected_val", selectedValue)
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentDetailSimpanan,fragment)
+            .commit()
     }
 
     private fun fetchUserNominal() {

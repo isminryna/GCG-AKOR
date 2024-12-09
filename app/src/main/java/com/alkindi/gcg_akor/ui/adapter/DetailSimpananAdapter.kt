@@ -1,25 +1,44 @@
 package com.alkindi.gcg_akor.ui.adapter
 
 import android.annotation.SuppressLint
-import android.telecom.Call.Details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.alkindi.gcg_akor.data.model.DetailSimpananModel
 import com.alkindi.gcg_akor.data.remote.response.DetailSimpananItem
-import com.alkindi.gcg_akor.databinding.ActivityTarikSimpananBinding
 import com.alkindi.gcg_akor.databinding.RvDetailsimpananCardBinding
+import com.alkindi.gcg_akor.utils.FormatterAngka
 
 class DetailSimpananAdapter :
     ListAdapter<DetailSimpananItem, DetailSimpananAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(private val binding: RvDetailsimpananCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DetailSimpananItem) {
-            binding.tvSimpananSukarela.text = item.txnCode
+            val nominalDetail =
+                FormatterAngka.formatterAngkaRibuanDouble(item.amount.toString().toDouble())
+            val tipeSimpanan = item.txnCode
+
+            when (tipeSimpanan) {
+                "SS" -> {
+                    binding.tvSimpananSukarela.text ="Simpanan Sukarela"
+                }
+                "SK" ->{
+                    binding.tvSimpananSukarela.text ="Simpanan Khusus"
+                }
+                "SKP"->{
+                    binding.tvSimpananSukarela.text ="Simpanan Khusus Pagu"
+                }
+                "SP"->{
+                    binding.tvSimpananSukarela.text ="Simpanan Pokok"
+                }
+                "SW"->{
+                    binding.tvSimpananSukarela.text ="Simpanan Wajib"
+                }
+            }
+
             binding.tglTransaksi.text = item.transDate
-            binding.tvNominalDetail.text =item.amount.toString()
+            binding.tvNominalDetail.text = nominalDetail
         }
     }
 

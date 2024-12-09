@@ -21,7 +21,6 @@ class DetailHistoryPinjamanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityDetailHistoryPinjamanBinding.inflate(layoutInflater)
         val view = binding.root
         enableEdgeToEdge()
@@ -52,6 +51,12 @@ class DetailHistoryPinjamanActivity : AppCompatActivity() {
             val nominalAsuransi = res.data?.get(0)?.asuransi.toString()
             val nominalProvisi = res.data?.get(0)?.provisi.toString()
             val nominalDanaDiterima = res.data?.get(0)?.danaCair.toString()
+            val nominalPotPribadi = res.data?.get(0)?.potPribadi.toString()
+            val jumlahTenor = res.data?.get(0)?.term.toString()
+            val nominalJasa = res.data?.get(0)?.jasa.toString()
+            val nominalTotal = res.data?.get(0)?.totAm.toString()
+            val nominalAngsuranPerBulan = res.data?.get(0)?.angsuran.toString()
+            val nominalTPot = res.data?.get(0)?.gaji.toString()
 
             val parsedTgl = FormatterAngka.dateFormatForDetail(tgl)
             val parsedNominalPinjaman =
@@ -63,6 +68,17 @@ class DetailHistoryPinjamanActivity : AppCompatActivity() {
                 FormatterAngka.formatterAngkaRibuanDouble(nominalAsuransi.toDouble())
             val parsedNominalDanaDiterima =
                 FormatterAngka.formatterAngkaRibuanDouble(nominalDanaDiterima.toDouble())
+            val parsedNominalPotPribadi =
+                FormatterAngka.formatterAngkaRibuanDouble(nominalPotPribadi.toDouble())
+            val parsedTenor = FormatterAngka.formatterAngkaRibuanDouble(jumlahTenor.toDouble())
+            val parsedNominalJasa =
+                FormatterAngka.formatterAngkaRibuanDouble(nominalJasa.toDouble())
+            val parsedNominalTotal =
+                FormatterAngka.formatterAngkaRibuanDouble(nominalTotal.toDouble())
+            val parsedAngsuranPerBulan =
+                FormatterAngka.formatterAngkaRibuanDouble(nominalAngsuranPerBulan.toDouble())
+            val parsedNominalTPot =
+                FormatterAngka.formatterAngkaRibuanDouble(nominalTPot.toDouble())
 
             binding.tvStatusPinjaman.text = res.data?.get(0)?.statusPjm ?: "Kosong"
             binding.tvTgl.text = parsedTgl
@@ -73,6 +89,16 @@ class DetailHistoryPinjamanActivity : AppCompatActivity() {
             binding.tvNominalAsuransi.text = parsedNominalAsuransi
             binding.tvNominalProvinsi.text = parsedProvisi
             binding.tvNominalDanaDiterima.text = parsedNominalDanaDiterima
+            binding.tvTipePinjamanInDetail.text = res.data?.get(0)?.pjmCode
+            binding.tvTipePotongan.text = res.data?.get(0)?.loanCode
+            binding.tvNominalPot.text = parsedNominalTPot
+            binding.tvNominalPotPribadi.text = parsedNominalPotPribadi
+            binding.tvNominaJumlahPinjaman.text = nominalPinjaman
+            binding.tvTenor.text = parsedTenor
+            binding.tvNominalJumlahJasa.text = parsedNominalJasa
+            binding.tvNominalTotal.text = parsedNominalTotal
+            binding.tvAngsuranPerBln.text = parsedAngsuranPerBulan
+            binding.tvNamaMember.text = res.data?.get(0)?.name
         }
     }
 
@@ -85,8 +111,12 @@ class DetailHistoryPinjamanActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.progressBar.visibility = View.VISIBLE
+            binding.cardStatusHistoryPinjaman.visibility = View.GONE
+            binding.cardNominalDetail.visibility = View.GONE
         } else {
             binding.progressBar.visibility = View.GONE
+            binding.cardStatusHistoryPinjaman.visibility = View.VISIBLE
+            binding.cardNominalDetail.visibility = View.VISIBLE
         }
     }
 

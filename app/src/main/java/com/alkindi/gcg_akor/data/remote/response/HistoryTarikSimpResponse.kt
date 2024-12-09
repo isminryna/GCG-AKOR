@@ -14,7 +14,7 @@ data class HistoryTarikSimpResponse(
     @SerializedName("createdinfo") val createdInfo: String? = "Kosong",
     @SerializedName("modifiedinfo") val modifiedInfo: String? = "Kosong",
     @SerializedName("doc_date") val docDate: String? = "Kosong",
-    @SerializedName("apr") val apr: String? = "Kosong",
+    @SerializedName("aprinfo") val apr: String? = "Kosong",
     @SerializedName("apr_by") val aprBy: String? = "Kosong",
     @SerializedName("apr_date") val aprDate: String? = "Kosong",
     @SerializedName("stp") val stp: String? = "Kosong",

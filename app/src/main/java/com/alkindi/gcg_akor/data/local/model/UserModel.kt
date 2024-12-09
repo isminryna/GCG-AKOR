@@ -34,3 +34,16 @@ data class UserProfile(
     val emailUser: String?,
     val noHPUser: String?
 ) : Parcelable
+
+@Parcelize
+data class InputtedBiayaPot(
+    val tipePinjaman: String,
+    val tipePotongan: String,
+    val nomTipePot: String,
+    val nomPotPri: String,
+    val noAtasan: String,
+    val jmlTenor: String,
+    val tanggalPencairan: String?,
+    val tanggalBonus: String?,
+    val nominalPinjaman: String?
+) : Parcelable

@@ -2,20 +2,26 @@ package com.alkindi.gcg_akor.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alkindi.gcg_akor.R
 import com.alkindi.gcg_akor.data.model.RiwayatTransaksiHomeModel
 import com.alkindi.gcg_akor.data.model.ViewModelFactory
+import com.alkindi.gcg_akor.data.remote.response.RiwayatTransaksiItem
 import com.alkindi.gcg_akor.databinding.ActivityHomeBinding
 import com.alkindi.gcg_akor.ui.adapter.RiwayatTransaksiHomeAdapter
 import com.alkindi.gcg_akor.ui.viewmodel.HomeViewModel
 import com.alkindi.gcg_akor.utils.AndroidUIHelper
+import com.alkindi.gcg_akor.utils.FormatterAngka
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,7 +30,8 @@ class HomeActivity : AppCompatActivity() {
     private val homeViewModel: HomeViewModel by viewModels {
         ViewModelFactory.getInstance(application)
     }
-    private val list = ArrayList<RiwayatTransaksiHomeModel>()
+    private val list = ArrayList<RiwayatTransaksiItem>()
+    private lateinit var userID: String
     private var pressedBack = false
     private lateinit var binding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +45,11 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        getSession()
+        getTotalPinjaman()
+        getRiwayatData()
+        checkLoading()
+        showTotalPinjaman()
         homeViewModel.checkSavedLoginData()
 
         binding.btnPersonalData.setOnClickListener {
@@ -73,16 +85,75 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 
+    private fun getRiwayatData() {
+        homeViewModel.getSession().observe(this) { res ->
+            lifecycleScope.launch {
+                homeViewModel.getRiwayatTransaksi(res.username)
+            }
+        }
+    }
+
+
+    private fun checkLoading() {
+        homeViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar?.visibility = View.VISIBLE
+        } else {
+            binding.progressBar?.visibility = View.GONE
+        }
+    }
+
+    private fun showTotalPinjaman() {
+        homeViewModel.totalPinjamanResponse.observe(this) { res ->
+            val nominalTotalPinjaman = res.data?.sum ?: 0
+            val formattedTotalPinjaman =
+                FormatterAngka.formatterAngkaRibuan(nominalTotalPinjaman)
+            binding.tvNominalPinjaman!!.text = formattedTotalPinjaman
+        }
+    }
+
+    private fun getSession() {
+        homeViewModel.getSession().observe(this) {
+            userID = it.username
+            getTotalPinjaman()
+        }
+    }
+
+    private fun getTotalPinjaman() {
+        lifecycleScope.launch {
+            if (::userID.isInitialized) {
+                homeViewModel.getTotalPinjaman(userID)
+            } else {
+                Log.e(TAG, "userID is not initialized")
+            }
+        }
+    }
+
 //    private fun checkSavedSession() {
 //        homeViewModel.checkSavedLoginData()
 //    }
 
     private fun getRvData() {
         binding.rvRiwayatTransaksiHome.layoutManager = LinearLayoutManager(this)
-        list.addAll(getRiwayatTransaksiData())
         val adapter = RiwayatTransaksiHomeAdapter()
-        adapter.submitList(list)
-        binding.rvRiwayatTransaksiHome.adapter = adapter
+        homeViewModel.riwayatTransaksiResponse.observe(this) { res ->
+            res.data?.filterNotNull()?.let { nonNullData ->
+                list.addAll(nonNullData)
+                adapter.submitList(nonNullData)
+                binding.rvRiwayatTransaksiHome.adapter =adapter
+            }
+        }
+
+//        binding.rvRiwayatTransaksiHome.layoutManager = LinearLayoutManager(this)
+//        list.addAll(getRiwayatTransaksiData())
+//        val adapter = RiwayatTransaksiHomeAdapter()
+//        adapter.submitList(list)
+//        binding.rvRiwayatTransaksiHome.adapter = adapter
     }
 
 
@@ -117,8 +188,12 @@ class HomeActivity : AppCompatActivity() {
                     this@HomeActivity,
                     "Tekan BACK kembali untuk keluar dari aplikasi"
                 )
-            binding.root.postDelayed({pressedBack =false},2000)
+                binding.root.postDelayed({ pressedBack = false }, 2000)
             }
         }
+    }
+
+    companion object {
+        private val TAG = HomeActivity::class.java.simpleName
     }
 }

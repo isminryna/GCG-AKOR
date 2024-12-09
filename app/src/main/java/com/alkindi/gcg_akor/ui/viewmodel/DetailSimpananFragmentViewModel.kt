@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.alkindi.gcg_akor.data.remote.response.DetailSimpananResponse
 import com.alkindi.gcg_akor.data.remote.retrofit.ApiConfig
@@ -17,6 +18,8 @@ class DetailSimpananFragmentViewModel(private val userRepository: UserRepository
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    fun getSession() = userRepository.getSession().asLiveData()
 
     fun getDetailSimpananData(userID: String, simpType: String) {
         if (userID.isEmpty() && simpType.isEmpty()) {

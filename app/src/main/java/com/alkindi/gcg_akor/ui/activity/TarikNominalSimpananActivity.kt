@@ -65,7 +65,6 @@ class TarikNominalSimpananActivity : AppCompatActivity() {
 
         binding.btnConfirmTarikSimpanan.setOnClickListener {
             confirmTarikSimpanan()
-
         }
     }
 
