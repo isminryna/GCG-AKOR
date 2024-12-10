@@ -1,5 +1,6 @@
 package com.alkindi.gcg_akor.data.remote.retrofit
 
+import com.alkindi.gcg_akor.data.remote.response.AjukanPinjamanLainResponse
 import com.alkindi.gcg_akor.data.remote.response.AjukanPinjamanResponse
 import com.alkindi.gcg_akor.data.remote.response.DetailHistoryPinjamanResponse
 import com.alkindi.gcg_akor.data.remote.response.DetailSimpananResponse
@@ -24,7 +25,6 @@ import retrofit2.http.POST
 import retrofit2.http.Url
 
 interface ApiService {
-
 
     @FormUrlEncoded
     @POST("preodm?fnc=auth")
@@ -125,4 +125,11 @@ interface ApiService {
         @Field("argt") argt: String = "vars",
         @Field("argl") argl: String
     ): HitungAdmPinjamanLainResponse
+
+    @FormUrlEncoded
+    @POST("${ApiConfig.BASE_URL_KOPEGMAR}txn?fnc=runLib;opic=${ApiConfig.API_DEV_CODE_KOPEGMAR};csn=${ApiConfig.WORKSPACE_CODE_KOPEGMAR};rc=tBuYtyWkt9DJpiePfo46tATnRtBFfK6yK6ChYzspyElabeFBWEFWHoDRiFVzSWeNxBeogXA5IyQ%3D")
+    suspend fun ajukanPinjamanLain(
+        @Field("argt") argt: String = "vars",
+        @Field("argl") argl: String
+    ): AjukanPinjamanLainResponse
 }

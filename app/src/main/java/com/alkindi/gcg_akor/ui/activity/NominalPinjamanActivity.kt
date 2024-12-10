@@ -83,7 +83,19 @@ class NominalPinjamanActivity : AppCompatActivity() {
 
     private fun observeResponsePengajuan() {
         if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
-//            nominalPinjamanViewModel
+            nominalPinjamanViewModel.uploadPengajuanPinjamanLain.observe(this) { res ->
+                if (res.code == 200) {
+                    val toDetailPinjaman = Intent(this, DetailPinjamanInfoActivity::class.java)
+                    AndroidUIHelper.showWarningToastShort(this, "Pengajuan pinjaman berhasil!")
+                    startActivity(toDetailPinjaman)
+                } else {
+                    AndroidUIHelper.showWarningToastShort(
+                        this,
+                        "Error: ${res.code}: ${res.message.toString()}"
+                    )
+                    return@observe
+                }
+            }
         } else {
             nominalPinjamanViewModel.uploadPengajuanPinjaman.observe(this) { res ->
                 if (res.code == 200) {
@@ -106,39 +118,64 @@ class NominalPinjamanActivity : AppCompatActivity() {
         val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
         val formattedDate = dateFormatter.format(tglSaatIni)
 
-        nominalPinjamanViewModel.hitungAdmResponse.observe(this) { res ->
-            lifecycleScope.launch {
-                nominalPinjamanViewModel.ajukanPinjaman(
-                    mbrid = userID,
-                    amount = FormatterAngka.formatterRibuanKeInt(binding.tvJumlahNominal.text.toString())
-                        .toString(),
-                    term = dataPotonganExtra?.jmlTenor ?: "",
-                    docDate = formattedDate.toString(),
-                    angsuran = res.data?.angsuran.toString(),
-                    asuransi = res.data?.asuransi.toString(),
-                    adm = res.data?.adm.toString(),
-                    maksAngsuran = res.data?.maksur.toString(),
-                    batasAngsuran = res.data?.batang.toString(),
-                    danaCair = res.data?.danaCair.toString(),
-                    dateBonus = dataPotonganExtra?.tanggalBonus,
-                    dateCair = dataPotonganExtra?.tanggalBonus,
-                    saldoPjm = res.data?.totPjm.toString(),
-                    simpKhusus = res.data?.simpKhusus.toString(),
-                    jasa = res.data?.jasa.toString(),
-                    loancode = dataPotonganExtra?.tipePinjaman.toString(),
-                    gaji = dataPotonganExtra?.nomTipePot.toString(),
-                    potonganPribadi = dataPotonganExtra?.nomPotPri.toString(),
-                    noAtasan = dataPotonganExtra?.noAtasan.toString(),
-                    jasaTotPjm = res.data?.jasaTotpjm.toString(),
-                    pjmCode = dataPotonganExtra?.tipePotongan.toString(),
-                    provisi = res.data?.provisi.toString(),
-                    minimalSimpanan = res.data?.minsimp.toString(),
-                    totalAmount = res.data?.total.toString()
-                )
+        if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
+            nominalPinjamanViewModel.hitungAdmResponseLain.observe(this) { res ->
+                lifecycleScope.launch {
+                    nominalPinjamanViewModel.ajukanPinjamanLain(
+                        mbrid = userID,
+                        amount = FormatterAngka.formatterRibuanKeInt(binding.tvJumlahNominal.text.toString())
+                            .toString(),
+                        term = binding.tvJmlTenor.text.toString(),
+                        docDate = formattedDate.toString(),
+                        angsuran = binding.edtAngsuran.text.toString(),
+                        asuransi = res.data?.asuransi.toString(),
+                        adm = res.data?.adm.toString(),
+                        pjmCode = dataPotonganExtra?.tipePotongan.toString(),
+                        jasa = FormatterAngka.formatterRibuanKeInt(binding.edtJasa.text.toString()).toString(),
+                        provisi = res.data?.provisi.toString(),
+                        loancode = dataPotonganExtra?.tipePinjaman.toString(),
+                        danaCair = res.data?.danaCair.toString(),
+                        gaji = dataPotonganExtra?.nomTipePot.toString(),
+                        noAtasan = dataPotonganExtra?.noAtasan.toString(),
+                        potonganPribadi = dataPotonganExtra?.nomPotPri.toString(),
+                        simpKhusus = res.data?.simpKhusus.toString(),
+                        totalAmount = binding.edtJmlTotal.text.toString()
+                    )
+                }
+            }
+        } else {
+            nominalPinjamanViewModel.hitungAdmResponse.observe(this) { res ->
+                lifecycleScope.launch {
+                    nominalPinjamanViewModel.ajukanPinjaman(
+                        mbrid = userID,
+                        amount = FormatterAngka.formatterRibuanKeInt(binding.tvJumlahNominal.text.toString())
+                            .toString(),
+                        term = dataPotonganExtra?.jmlTenor ?: "",
+                        docDate = formattedDate.toString(),
+                        angsuran = res.data?.angsuran.toString(),
+                        asuransi = res.data?.asuransi.toString(),
+                        adm = res.data?.adm.toString(),
+                        maksAngsuran = res.data?.maksur.toString(),
+                        batasAngsuran = res.data?.batang.toString(),
+                        danaCair = res.data?.danaCair.toString(),
+                        dateBonus = dataPotonganExtra?.tanggalBonus,
+                        dateCair = dataPotonganExtra?.tanggalBonus,
+                        saldoPjm = res.data?.totPjm.toString(),
+                        simpKhusus = res.data?.simpKhusus.toString(),
+                        jasa = res.data?.jasa.toString(),
+                        loancode = dataPotonganExtra?.tipePinjaman.toString(),
+                        gaji = dataPotonganExtra?.nomTipePot.toString(),
+                        potonganPribadi = dataPotonganExtra?.nomPotPri.toString(),
+                        noAtasan = dataPotonganExtra?.noAtasan.toString(),
+                        jasaTotPjm = res.data?.jasaTotpjm.toString(),
+                        pjmCode = dataPotonganExtra?.tipePotongan.toString(),
+                        provisi = res.data?.provisi.toString(),
+                        minimalSimpanan = res.data?.minsimp.toString(),
+                        totalAmount = res.data?.total.toString()
+                    )
+                }
             }
         }
-
-
     }
 
     private fun showRincianPotongan() {

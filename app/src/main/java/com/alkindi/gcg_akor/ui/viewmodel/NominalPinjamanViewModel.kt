@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.alkindi.gcg_akor.data.remote.response.AjukanPinjamanLainResponse
 import com.alkindi.gcg_akor.data.remote.response.AjukanPinjamanResponse
 import com.alkindi.gcg_akor.data.remote.response.HitungAdmPinjamanLainResponse
 import com.alkindi.gcg_akor.data.remote.response.HitungAdmPinjamanResponse
@@ -21,6 +22,10 @@ class NominalPinjamanViewModel(private val userRepository: UserRepository) : Vie
 
     private val _uploadPengajuanPinjaman = MutableLiveData<AjukanPinjamanResponse>()
     val uploadPengajuanPinjaman: LiveData<AjukanPinjamanResponse> = _uploadPengajuanPinjaman
+
+    private val _uploadPengajuanPinjamanLain = MutableLiveData<AjukanPinjamanLainResponse>()
+    val uploadPengajuanPinjamanLain: LiveData<AjukanPinjamanLainResponse> =
+        _uploadPengajuanPinjamanLain
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -46,7 +51,7 @@ class NominalPinjamanViewModel(private val userRepository: UserRepository) : Vie
                 "mbrid":"$mbrid",
                 "sal":"$sal",
                 "pot":"$pot"
-                }""".trimIndent()
+                }""".trimMargin()
             val response = apiService.hitungAdmPinjaman(argl = argl)
             _hitungAdmResponse.value = response
         } catch (e: Exception) {
@@ -81,6 +86,58 @@ class NominalPinjamanViewModel(private val userRepository: UserRepository) : Vie
         } finally {
             _isLoading.value = false
         }
+    }
+
+    suspend fun ajukanPinjamanLain(
+        mbrid: String,
+        amount: String,
+        term: String,
+        docDate: String,
+        angsuran: String,
+        totalAmount: String,
+        loancode: String,
+        adm: String,
+        pjmCode: String,
+        provisi: String,
+        asuransi: String,
+        jasa: String,
+        simpKhusus: String,
+        danaCair: String,
+        gaji: String,
+        potonganPribadi: String,
+        noAtasan: String
+    ) {
+        try {
+            _isLoading.value = true
+            val argl = """{
+                 "mbrid":"$mbrid",
+                "amount":"$amount",
+                "term":"$term",
+                "doc_date":"$docDate",
+                "angsuran":"$angsuran",
+                "tot_am":"$totalAmount",
+                "loancode":"$loancode",
+                "adm":"$adm",
+                "pjm_code":"$pjmCode",
+                "provisi":"$provisi",
+                "asuransi":"$asuransi",
+                "jasa":"$jasa",
+                "simp_khusus":"$simpKhusus",
+                "dana_cair":"$danaCair",
+                "gaji":"$gaji",
+                "pot_pribadi":"$potonganPribadi",
+                "no_atasan":"$noAtasan"
+                }""".trimMargin()
+            val apiService = ApiConfig.getApiService()
+            val response = apiService.ajukanPinjamanLain(argl = argl)
+            _uploadPengajuanPinjamanLain.value = response
+        } catch (e: Exception) {
+            Log.e(TAG, "Unable to call the function: ${e.message}")
+            return
+        } finally {
+            _isLoading.value = false
+        }
+
     }
 
     suspend fun ajukanPinjaman(

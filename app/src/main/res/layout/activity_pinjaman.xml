@@ -177,14 +177,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="No. Atasan" />
+                            android:text="No. HP Atasan" />
 
                         <EditText
                             android:id="@+id/edtNoAtasan"
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:hint="Masukkan no. atasan"
-                            android:inputType="number" />
+                            android:inputType="phone" />
 
 
                         <LinearLayout

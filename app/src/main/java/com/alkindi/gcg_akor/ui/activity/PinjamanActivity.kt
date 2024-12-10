@@ -141,12 +141,10 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
     private fun toInputNominalPinjaman() {
         val nomTipePotongan = binding.edtNominalPotongan?.text.toString().replace(",", "")  //sal
         val nomPotPribadi = binding.edtPotonganPribadi?.text.toString().replace(",", "") //pot
-//        val nomJmlPinjaman = binding.edtJmlPinjaman?.text.toString().replace(",","")    //am
         val noAtasan = binding.edtNoAtasan?.text.toString()
         val mbrid = userID
-        val tipePinjaman = tipePinjaman //lon
+        val tipePinjaman = tipePinjaman
         val tipePotongan = binding.spinnerTipePotongan?.selectedItem.toString()
-//        val tenorPinjaman = binding.spinnerTenor?.selectedItem.toString() //term
         val tenorPinjaman = selectedTenor
         val tglPencairan = binding.edtTglPencairan?.text.toString()
         val edtTenorPinjaman = binding.edtTenor?.text.toString()
@@ -201,45 +199,12 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
     }
 
-//    private fun getBiayaAdministrasi() {
-//        pinjamanViewModel.hitungAdmResponse.observe(this){ res ->
-//            val nominalBiayaAdminstrasi =res.data?.adm.toString()
-//            val nominalAsuransiBln =res.data?.asuransi.toString()
-//            val nominalProvisi =res.data?.provisi.toString()
-//
-//            binding.edtAdministrasi?.setText(nominalBiayaAdminstrasi)
-//            binding.edtAsuransi?.setText(nominalAsuransiBln)
-//            binding.edtProvisi?.setText(nominalProvisi)
-//        }
-//    }
-
     private fun getSession() {
         pinjamanViewModel.getSession().observe(this) {
             userID = it.username
         }
     }
 
-//    private fun hitungBiayaAdministrasi() {
-//        val nomTipePotongan = binding.edtNominalPotongan?.text.toString().replace(",","")  //sal
-//        val nomPotPribadi = binding.edtPotonganPribadi?.text.toString().replace(",","") //pot
-////        val nomJmlPinjaman = binding.edtJmlPinjaman?.text.toString().replace(",","")    //am
-//        val mbrid = userID
-//        val tipePinjaman = tipePinjaman //lon
-//        val tenorPinjaman = binding.spinnerTenor?.selectedItem //term
-//
-//
-//        lifecycleScope.launch {
-//            pinjamanViewModel.hitungAdmPinjaman(
-//                tipePinjaman,
-//                nomJmlPinjaman,
-//                tenorPinjaman.toString(),
-//                mbrid,
-//                nomTipePotongan,
-//                nomPotPribadi
-//            )
-//        }
-//
-//    }
 
     private fun observeTipePotonganData() {
         pinjamanViewModel.listPotonganResponse.observe(this) { resp ->
@@ -358,6 +323,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvTglBonus?.visibility = View.GONE
                 binding.edtTglBonus?.visibility = View.GONE
 
+
                 binding.spinnerTenor?.visibility = View.VISIBLE
                 binding.edtTenor?.visibility = View.GONE
             }
@@ -407,6 +373,10 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtAsuransi?.visibility = View.GONE
                 binding.tvProvisi?.visibility = View.GONE
                 binding.edtProvisi?.visibility = View.GONE
+                binding.tvTglPencairan?.visibility = View.GONE
+                binding.edtTglPencairan?.visibility = View.GONE
+                binding.tvTglBonus?.visibility = View.GONE
+                binding.edtTglBonus?.visibility = View.GONE
 
                 binding.spinnerTenor?.visibility = View.GONE
                 binding.edtTenor?.visibility = View.VISIBLE
@@ -430,6 +400,10 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtDanaDiterima?.visibility = View.VISIBLE
                 binding.tvSimpananPagu?.visibility = View.GONE
                 binding.edtSimpananPagu?.visibility = View.GONE
+                binding.tvTglPencairan?.visibility = View.GONE
+                binding.edtTglPencairan?.visibility = View.GONE
+                binding.tvTglBonus?.visibility = View.GONE
+                binding.edtTglBonus?.visibility = View.GONE
 
                 binding.spinnerTenor?.visibility = View.VISIBLE
                 binding.edtTenor?.visibility = View.GONE
@@ -453,9 +427,13 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtAdministrasi?.visibility = View.GONE
                 binding.tvProvisi?.visibility = View.GONE
                 binding.edtProvisi?.visibility = View.GONE
+                binding.tvTglPencairan?.visibility = View.GONE
+                binding.edtTglPencairan?.visibility = View.GONE
+                binding.tvTglBonus?.visibility = View.GONE
+                binding.edtTglBonus?.visibility = View.GONE
 
-                binding.spinnerTenor?.visibility = View.VISIBLE
-                binding.edtTenor?.visibility = View.GONE
+                binding.spinnerTenor?.visibility = View.GONE
+                binding.edtTenor?.visibility = View.VISIBLE
             }
 
             "Jangka Pendek" -> {
@@ -474,6 +452,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.edtTglPencairan?.visibility = View.VISIBLE
                 binding.tvTglBonus?.visibility = View.VISIBLE
                 binding.edtTglBonus?.visibility = View.VISIBLE
+
                 binding.spinnerTenor?.visibility = View.VISIBLE
                 binding.edtTenor?.visibility = View.GONE
             }

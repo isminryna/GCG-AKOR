@@ -46,6 +46,10 @@ class RiwayatTransaksiHomeAdapter :
                     binding.tvTipeTransaksi.text = "Jangka Panjang"
                 }
 
+                "RUMAH"->{
+                    binding.tvTipeTransaksi.text = "Rumah"
+                }
+
             }
             when(statusTransaksi){
                 'n' ->{
