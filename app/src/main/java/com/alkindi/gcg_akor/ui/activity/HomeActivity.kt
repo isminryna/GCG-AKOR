@@ -103,8 +103,10 @@ class HomeActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.progressBar?.visibility = View.VISIBLE
+            binding.rvRiwayatTransaksiHome.visibility = View.GONE
         } else {
             binding.progressBar?.visibility = View.GONE
+            binding.rvRiwayatTransaksiHome.visibility = View.VISIBLE
         }
     }
 
@@ -145,7 +147,7 @@ class HomeActivity : AppCompatActivity() {
             res.data?.filterNotNull()?.let { nonNullData ->
                 list.addAll(nonNullData)
                 adapter.submitList(nonNullData)
-                binding.rvRiwayatTransaksiHome.adapter =adapter
+                binding.rvRiwayatTransaksiHome.adapter = adapter
             }
         }
 

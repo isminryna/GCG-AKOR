@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.alkindi.gcg_akor.data.remote.response.HitungAdmPinjamanResponse
 import com.alkindi.gcg_akor.data.remote.response.TenorListResponse
 import com.alkindi.gcg_akor.data.remote.response.TipePotonganResponse
 import com.alkindi.gcg_akor.data.remote.retrofit.ApiConfig
@@ -18,9 +17,6 @@ class PinjamanViewModel(private val userRepository: UserRepository) : ViewModel(
 
     private val _listTenor = MutableLiveData<TenorListResponse>()
     val listTenor: LiveData<TenorListResponse> = _listTenor
-
-    private val _hitungAdmResponse = MutableLiveData<HitungAdmPinjamanResponse>()
-    val hitungAdmResponse: LiveData<HitungAdmPinjamanResponse> = _hitungAdmResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -48,35 +44,6 @@ class PinjamanViewModel(private val userRepository: UserRepository) : ViewModel(
             } finally {
                 _isLoading.value = false
             }
-        }
-    }
-
-    suspend fun hitungAdmPinjaman(
-        lon: String,
-        am: Any,
-        term: String,
-        mbrid: String,
-        sal: Any,
-        pot: Any
-    ) {
-        try {
-            _isLoading.value = true
-
-            val apiService = ApiConfig.getApiService()
-            var argl = """{
-                "lon":"$lon",
-                "am":"$am",
-                "term":"$term",
-                "mbrid":"$mbrid",
-                "sal":"$sal",
-                "pot":"$pot"
-                }""".trimIndent()
-            val response = apiService.hitungAdmPinjaman(argl = argl)
-            _hitungAdmResponse.value = response
-        } catch (e: Exception) {
-            Log.e(TAG, "Error: ${Log.ERROR} ")
-        } finally {
-            _isLoading.value = false
         }
     }
 

@@ -55,12 +55,6 @@ class NominalPinjamanActivity : AppCompatActivity() {
             finish()
         }
         binding.btnConfirmPinjaman.setOnClickListener {
-//            startActivity(
-//                Intent(
-//                    this@NominalPinjamanActivity,
-//                    DetailPinjamanInfoActivity::class.java
-//                )
-//            )
             unggahDataPengajuanPinjaman()
         }
 
@@ -72,17 +66,10 @@ class NominalPinjamanActivity : AppCompatActivity() {
     private fun checkJenisPinjaman() {
         val tipePinjaman = binding.tvTipePinjaman.text.toString()
         this.tipePinjaman = tipePinjaman
-//        if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
-//            binding.btnHitungBiaya.visibility = View.GONE
-//            binding.btnConfirmPinjaman.visibility = View.VISIBLE
-//        }else{
-//            binding.btnHitungBiaya.visibility = View.VISIBLE
-//            binding.btnConfirmPinjaman.visibility = View.GONE
-//        }
     }
 
     private fun observeResponsePengajuan() {
-        if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
+        if (tipePinjaman == "Rumah" || tipePinjaman == "Mobil") {
             nominalPinjamanViewModel.uploadPengajuanPinjamanLain.observe(this) { res ->
                 if (res.code == 200) {
                     val toDetailPinjaman = Intent(this, DetailPinjamanInfoActivity::class.java)
@@ -118,7 +105,7 @@ class NominalPinjamanActivity : AppCompatActivity() {
         val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
         val formattedDate = dateFormatter.format(tglSaatIni)
 
-        if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
+        if (tipePinjaman == "Rumah" || tipePinjaman == "Mobil") {
             nominalPinjamanViewModel.hitungAdmResponseLain.observe(this) { res ->
                 lifecycleScope.launch {
                     nominalPinjamanViewModel.ajukanPinjamanLain(
@@ -130,10 +117,11 @@ class NominalPinjamanActivity : AppCompatActivity() {
                         angsuran = binding.edtAngsuran.text.toString(),
                         asuransi = res.data?.asuransi.toString(),
                         adm = res.data?.adm.toString(),
-                        pjmCode = dataPotonganExtra?.tipePotongan.toString(),
-                        jasa = FormatterAngka.formatterRibuanKeInt(binding.edtJasa.text.toString()).toString(),
+                        loanCode = dataPotonganExtra?.tipePotongan.toString(),
+                        jasa = FormatterAngka.formatterRibuanKeInt(binding.edtJasa.text.toString())
+                            .toString(),
                         provisi = res.data?.provisi.toString(),
-                        loancode = dataPotonganExtra?.tipePinjaman.toString(),
+                        pjmCode = dataPotonganExtra?.tipePinjaman.toString(),
                         danaCair = res.data?.danaCair.toString(),
                         gaji = dataPotonganExtra?.nomTipePot.toString(),
                         noAtasan = dataPotonganExtra?.noAtasan.toString(),
@@ -179,7 +167,7 @@ class NominalPinjamanActivity : AppCompatActivity() {
     }
 
     private fun showRincianPotongan() {
-        if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
+        if (tipePinjaman == "Rumah" || tipePinjaman == "Mobil") {
             nominalPinjamanViewModel.hitungAdmResponseLain.observe(this) { res ->
                 if (res.code == 200) {
                     binding.cardviewRincian.visibility = View.VISIBLE
@@ -304,13 +292,13 @@ class NominalPinjamanActivity : AppCompatActivity() {
             "MOBIL" -> {
                 binding.tvTipePinjaman.text = "Mobil"
                 binding.imTipePinjaman.setImageResource(R.drawable.ic_mobil)
-                binding.fieldTambahan.visibility = View.GONE
+                binding.fieldTambahan.visibility = View.VISIBLE
             }
 
             "MOTOR" -> {
                 binding.tvTipePinjaman.text = "Motor"
                 binding.imTipePinjaman.setImageResource(R.drawable.ic_motor)
-                binding.fieldTambahan.visibility = View.VISIBLE
+                binding.fieldTambahan.visibility = View.GONE
             }
 
             "JAPEN" -> {
@@ -322,25 +310,29 @@ class NominalPinjamanActivity : AppCompatActivity() {
     }
 
     private fun hitungBiayaBtnPressed() {
-        if (tipePinjaman == "Rumah" || tipePinjaman == "Motor") {
-            val tipePinjaman = dataPotonganExtra?.tipePinjaman.toString()
-            val tenor = dataPotonganExtra?.jmlTenor.toString()
-            val mbrid = userID
-            dataPotonganExtra?.nomTipePot.toString()
-            val jasa =
-                FormatterAngka.formatterRibuanKeInt(binding.edtJasa.text.toString()).toString()
-            dataPotonganExtra?.nomPotPri.toString()
-            val pinjamanDiajukan =
-                FormatterAngka.formatterRibuanKeInt(binding.tvJumlahNominal.text.toString())
-                    .toString()
-            lifecycleScope.launch {
-                nominalPinjamanViewModel.hitungAdmPinjamanLain(
-                    am = pinjamanDiajukan,
-                    mbrid = mbrid,
-                    jasa = jasa,
-                    term = tenor,
-                    lon = tipePinjaman
-                )
+        if (tipePinjaman == "Rumah" || tipePinjaman == "Mobil") {
+            if (!binding.edtAngsuran.text.isNullOrEmpty() && !binding.edtJasa.text.isNullOrEmpty()) {
+                val tipePinjaman = dataPotonganExtra?.tipePinjaman.toString()
+                val tenor = dataPotonganExtra?.jmlTenor.toString()
+                val mbrid = userID
+                dataPotonganExtra?.nomTipePot.toString()
+                val jasa =
+                    FormatterAngka.formatterRibuanKeInt(binding.edtJasa.text.toString()).toString()
+                dataPotonganExtra?.nomPotPri.toString()
+                val pinjamanDiajukan =
+                    FormatterAngka.formatterRibuanKeInt(binding.tvJumlahNominal.text.toString())
+                        .toString()
+                lifecycleScope.launch {
+                    nominalPinjamanViewModel.hitungAdmPinjamanLain(
+                        am = pinjamanDiajukan,
+                        mbrid = mbrid,
+                        jasa = jasa,
+                        term = tenor,
+                        lon = tipePinjaman
+                    )
+                }
+            }else{
+                AndroidUIHelper.showWarningToastShort(this, "Silahkan lengkapi field yang masih kosong!")
             }
         } else {
             val tipePinjaman = dataPotonganExtra?.tipePinjaman.toString()

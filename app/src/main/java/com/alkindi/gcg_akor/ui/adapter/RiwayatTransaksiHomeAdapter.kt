@@ -49,6 +49,15 @@ class RiwayatTransaksiHomeAdapter :
                 "RUMAH"->{
                     binding.tvTipeTransaksi.text = "Rumah"
                 }
+                "MOBIL"->{
+                    binding.tvTipeTransaksi.text ="Mobil"
+                }
+                "BRANG"->{
+                    binding.tvTipeTransaksi.text ="Kredit Barang"
+                }
+                "JAPEN"->{
+                    binding.tvTipeTransaksi.text ="Jangka Pendek"
+                }
 
             }
             when(statusTransaksi){
@@ -65,15 +74,7 @@ class RiwayatTransaksiHomeAdapter :
             Log.d(
                 TAG, "List status transaksi: $statusTransaksi"
             )
-//            val status = item.aprinfo.toString()
-
             binding.tvTanggal.text = tglTransaksi
-//            binding.tvJenisTransaksi.text = tipeTransaksi
-
-//            binding.tvJenisTransaksi.text = item.jenisTransaksi
-//            binding.tvTipeTransaksi.text = item.tipeTransaksi
-//            Glide.with(itemView.context).load(item.status).into(binding.icStatus)
-//            binding.tvTanggal.text = item.tglTransaksi
         }
     }
 

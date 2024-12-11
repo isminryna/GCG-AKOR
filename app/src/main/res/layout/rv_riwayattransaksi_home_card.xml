@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="Pinjaman"
+            android:text="*Loading"
             android:textSize="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Pinjaman Tahunan"
+            android:text="*Loading"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvJenisTransaksi" />
@@ -38,7 +38,7 @@
             android:id="@+id/tvTanggal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4 Sep 2024"
+            android:text="*Loading"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/abu_abu_pinjaman"
             android:textSize="8dp"

@@ -70,7 +70,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                     )
                     return@setOnClickListener
                 }
-            } else if (tipePinjaman == "MOTOR") {
+            } else if (tipePinjaman == "MOBIL") {
                 if (!binding.edtNominalPotongan?.text.isNullOrEmpty() && !binding.edtPotonganPribadi?.text.isNullOrEmpty() && !binding.edtNoAtasan?.text.isNullOrEmpty() && !binding.edtTenor?.text.isNullOrEmpty()) {
                     toInputNominalPinjaman()
                 } else {
@@ -165,7 +165,7 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             val toInputNominal = Intent(this@PinjamanActivity, NominalPinjamanActivity::class.java)
             toInputNominal.putExtra(NominalPinjamanActivity.EXTRA_DATA, extraData)
             startActivity(toInputNominal)
-        } else if (tipePinjaman == "MOTOR") {
+        } else if (tipePinjaman == "MOBIL") {
             val extraData = InputtedBiayaPot(
                 tipePinjaman,
                 tipePotongan,
@@ -378,8 +378,8 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvTglBonus?.visibility = View.GONE
                 binding.edtTglBonus?.visibility = View.GONE
 
-                binding.spinnerTenor?.visibility = View.GONE
-                binding.edtTenor?.visibility = View.VISIBLE
+                binding.spinnerTenor?.visibility = View.VISIBLE
+                binding.edtTenor?.visibility = View.GONE
             }
 
             "Mobil" -> {
@@ -405,8 +405,8 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvTglBonus?.visibility = View.GONE
                 binding.edtTglBonus?.visibility = View.GONE
 
-                binding.spinnerTenor?.visibility = View.VISIBLE
-                binding.edtTenor?.visibility = View.GONE
+                binding.spinnerTenor?.visibility = View.GONE
+                binding.edtTenor?.visibility = View.VISIBLE
             }
 
             "Motor" -> {
@@ -432,8 +432,8 @@ class PinjamanActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 binding.tvTglBonus?.visibility = View.GONE
                 binding.edtTglBonus?.visibility = View.GONE
 
-                binding.spinnerTenor?.visibility = View.GONE
-                binding.edtTenor?.visibility = View.VISIBLE
+                binding.spinnerTenor?.visibility = View.VISIBLE
+                binding.edtTenor?.visibility = View.GONE
             }
 
             "Jangka Pendek" -> {
